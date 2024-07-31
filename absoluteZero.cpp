@@ -56,27 +56,48 @@
 //     cin>>t;
 //     while (t--)
 //     {
-//         ll n,x;
-//         cin>>n>>x;
-//         ll sum = 0;
-//         for (ll i=1; i<=x; i++){
-//             ll kk;
-//             if (i==1)
-//                 kk = x-i;
-//             else
-//                 kk = n/i;    
-//             // cout<<kk<<' ';
-//             for (ll j=1; j<=kk; j++){
-//                 ll pp = min((n-i*j)/(i+j),x-(i+j));
-//                 sum += max(pp,0LL);
-
+//         ll n;
+//         cin>>n;
+//         vi a;
+//         bool f=true;
+//         bool m=false;
+//         for (ll i=0; i<n; i++){
+//             ll x; cin>>x;
+//             a.pb(x);
+//             if (x%2 == 0)
+//                 m=true;
+//             if (i!=0){
+//                 if (a[i]%2 != a[i-1]%2)
+//                     f = false;
 //             }
-//             // cout<<sum<<' ';
 //         }       
-//         cout<<sum<<endl;
+//         if (n==1){
+//             cout<<1<<endl;
+//             cout<<a[0]<<endl;
+//             continue;
+//         }
+//         if (!f){
+//             cout<<-1<<endl;
+//             continue;
+//         }
+
+//         vi v;
+//         for (ll i=29; i>=0; i--){
+//             ll k = (1<<i);
+//             v.pb(k);
+//         }
+//         if (m)
+//             v.pb(1);
+
+//         cout<<v.size()<<endl;
+//         for (auto i:v)
+//             cout<<i<<' ';
+//         cout<<endl;        
+        
 //     }
 //     return 0;
 // }
+
 
 
 // Rishikesh Chaudhari
@@ -137,17 +158,40 @@ int main() {
     cin>>t;
     while (t--)
     {
-        ll n,x;
-        cin>>n>>x;
-        ll ans = 0;
-        for (ll i=1; i<=n; i++){
-            for (ll j=1; j<=i; j++){
-                ll c = min(x-i-j,(n-i*j)/(i+j));
-                ans += max(0LL,c);
+        ll n;
+        cin>>n;
+        vi a;
+        bool f=true;
+        for  (ll i=0; i<n; i++){
+            ll x; cin>>x;
+            a.pb(x);
+            if (i!=0){
+                if (a[i-1]%2 != a[i]%2){
+                    f=false;
+                }
             }
         }
+        if (!f){
+            cout<<-1<<endl;
+            continue;
+        }
+        vi v;
+        for (ll i=0; i<30; i++){
+            sort(a.begin(),a.end());
+            if (a[0]==a[n-1] && a[0]==0){
+                break;
+            }
+            ll m = a[0]+(a[n-1]-a[0])/2;
+            v.pb(m);
+            for (ll i=0; i<n; i++){
+                a[i] = abs(a[i]-m);
+            }
+        }
+        cout<<v.size()<<endl;
+        for (auto i:v)
+            cout<<i<<' ';
+        cout<<endl;    
 
-        cout<<ans<<endl;
     }
     return 0;
 }
