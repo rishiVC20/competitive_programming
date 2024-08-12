@@ -140,40 +140,56 @@ ll power(ll base, ll exponent)
     return ans;
 }
 
+ll calc(ll n){
+    if (n<3)
+        return 1;
+    return 1+calc(n/3);    
+}
 
 int main() {
     ll t;
     cin>>t;
-    vi pre;
-    pre.pb(0);
-    pre.pb(1);
-    pre.pb(1);
-    pre.pb(2);
-    pre.pb(2);
-    pre.pb(2);
-    pre.pb(2);
-    pre.pb(2);
-    pre.pb(2);
-    pre.pb(2);
-    pre.pb(3);
-    pre.pb(3);
-    pre.pb(3);
-    pre.pb(3);
-    for (ll i=14; i<1e7; i++){
-        ll t=i/3;
-        pre.pb(pre[t]+1);
+    vector<ll> q;
+    q.pb(0);
+    q.pb(1);
+    q.pb(1);
+    q.pb(2);
+    q.pb(2);
+    q.pb(2);
+    q.pb(2);
+    q.pb(2);
+    q.pb(2);
+    q.pb(3);
+    q.pb(3);
+    q.pb(3);
+    q.pb(3);
+    for (ll i=13; i<1e5; i++){
+        ll c=i/3;
+        q.pb(q[c]+1);
+    }
+    vi pre(1e5);
+    pre[0]=0;
+    for (ll i=1; i<1e5; i++){
+        pre[i]=pre[i-1]+q[i];
+    }
+    vi ss(3e5,0);
+    ss[1]=1;
+    for (ll i=2; i<3e5; i++){
+        ss[i] = ss[i-1]+calc(i);
     }
     while (t--)
     {
         ll l,r;
         cin>>l>>r;
-        ll k = pre[l+1];
-        ll j = l*pow(3,k);
+        // ll k = pre[l+1];
+        // ll j = l*pow(3,k);
         ll sum = 0;
-        sum += pre[j];
-        for (ll i=l+2; i<=r; i++){
-            sum += pre[i];
-        }
+        // sum += pre[j];
+        // for (ll i=l+2; i<=r; i++){
+        //     sum += pre[i];
+        // }
+        
+        sum += 2*calc(l) + ss[r] - ss[l];
 
         cout<<sum<<endl;
     }

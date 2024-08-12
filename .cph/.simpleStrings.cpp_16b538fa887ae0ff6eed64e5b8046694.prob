@@ -1,0 +1,1 @@
+{"name":"Local: simpleStrings","url":"d:\\competitive programming\\simpleStrings.cpp","tests":[{"id":1722944977710,"input":"aab\n","output":"bab\n"},{"id":1722944986402,"input":"","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\competitive programming\\simpleStrings.cpp","group":"local","local":true}

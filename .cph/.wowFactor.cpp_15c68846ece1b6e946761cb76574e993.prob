@@ -1,0 +1,1 @@
+{"name":"Local: wowFactor","url":"d:\\competitive programming\\wowFactor.cpp","tests":[{"id":1722860605030,"input":"vvovooovovvovoovoovvvvovovvvov","output":"100\n"},{"id":1722861402585,"input":"vvvovvv\n","output":"4"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\competitive programming\\wowFactor.cpp","group":"local","local":true}
