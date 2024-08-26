@@ -56,30 +56,77 @@ int main() {
     cin>>t;
     while (t--)
     {
-        ll x1,x2,y1,y2;
-        cin>>x1>>x2>>y1>>y2;
-        if(x2<y1 || y2<x1){
-            cout<<1<<endl;
-            continue;
+        ll n;
+        cin>>n;
+        vi a;
+        for(ll i=0; i<n; i++){
+            ll x;cin>>x;
+            a.pb(x);
         }
-        vi v(101,0);
-        for(ll i=x1; i<=x2; i++){
-            v[i]++;
-        }       
-        for(ll i=y1; i<=y2; i++){
-            v[i]++;
-        }       
-        ll cn=0;
-        for(ll i=0; i<100; i++){
-            if(v[i]==1 && v[i+1]==2){
-                cn++;
+        set<ll>st;
+        vi b(n);
+        for(ll i=0; i<n; i++){
+            st.insert(a[i]);
+            b[i]=st.size();
+        }
+        ll m;cin>>m;
+        for(ll i=0; i<m; i++){
+            ll l,r;
+            cin>>l>>r;
+            ll p1=b[r-1];
+            ll p2=b[l-1];
+            if(p1-p2==0 && st.size()==1){
+                cout<<-1<<' '<<-1<<endl;
             }
-            if(v[i]==2 && v[i+1]>=1){
-                cn++;
+            else{
+                ll h=a[l-1];
+                ll nn=INT_MIN;
+                for(ll j=l; j<r; j++){
+                    if(a[j] != h){
+                        nn=j;
+                        break;
+                    }
+                }
+                if(nn==INT_MIN){
+                    cout<<-1<<' '<<-1<<endl;
+                    continue;
+                }
+                cout<<l<<' '<<nn+1<<endl;
             }
         }
-
-        cout<<cn<<endl;
+        cout<<endl;
     }
     return 0;
 }
+
+/*
+2 3
+-1 -1
+1 3
+
+2 1
+-1 -1
+4 2
+4 6
+5 3
+
+1 2
+1 2
+2 3
+3 2
+
+1 3
+2 4
+3 4
+5 3
+5 4
+
+1 2
+4 2
+1 3
+2 3
+3 2
+5 4
+5 4
+
+*/

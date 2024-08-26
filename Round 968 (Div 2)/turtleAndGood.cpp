@@ -56,30 +56,16 @@ int main() {
     cin>>t;
     while (t--)
     {
-        ll x1,x2,y1,y2;
-        cin>>x1>>x2>>y1>>y2;
-        if(x2<y1 || y2<x1){
-            cout<<1<<endl;
-            continue;
-        }
-        vi v(101,0);
-        for(ll i=x1; i<=x2; i++){
-            v[i]++;
+        ll n;
+        cin>>n;
+        string s;
+        cin>>s;
+        if(s[0]==s[n-1]){
+            NO;
         }       
-        for(ll i=y1; i<=y2; i++){
-            v[i]++;
-        }       
-        ll cn=0;
-        for(ll i=0; i<100; i++){
-            if(v[i]==1 && v[i+1]==2){
-                cn++;
-            }
-            if(v[i]==2 && v[i+1]>=1){
-                cn++;
-            }
+        else{
+            YES;
         }
-
-        cout<<cn<<endl;
     }
     return 0;
 }

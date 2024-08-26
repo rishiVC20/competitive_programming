@@ -56,30 +56,50 @@ int main() {
     cin>>t;
     while (t--)
     {
-        ll x1,x2,y1,y2;
-        cin>>x1>>x2>>y1>>y2;
-        if(x2<y1 || y2<x1){
-            cout<<1<<endl;
-            continue;
+        ll n;
+        cin>>n;
+        string s;
+        cin>>s;
+        map<char,ll>mp;
+        set<char>st;
+        for(auto i:s){
+            mp[i]++;
+            st.insert(i);
         }
-        vi v(101,0);
-        for(ll i=x1; i<=x2; i++){
-            v[i]++;
-        }       
-        for(ll i=y1; i<=y2; i++){
-            v[i]++;
-        }       
-        ll cn=0;
-        for(ll i=0; i<100; i++){
-            if(v[i]==1 && v[i+1]==2){
-                cn++;
-            }
-            if(v[i]==2 && v[i+1]>=1){
-                cn++;
+        // if(st.size()==1 || st.size()==n){
+        //     cout<<s<<endl;
+        //     continue;
+        // }
+        vector<pair<char,ll>>v;
+        for(auto i:mp){
+            v.pb({i.first,i.second});
+        }
+        sort(v.begin(),v.end(),[&](pair<ll,ll>a,pair<ll,ll>b){
+            return a.second>b.second;
+        });
+        ll j=0;
+        vector<char>bb(n,'-');
+        for(ll i=0; i<v.size(); i++){
+            ll k=v[i].second;
+            char m=v[i].first;
+            
+            while(k>0){
+                bb[j]=m;
+                
+                k--;
+                if(j>=n-2){
+                    j=1;
+                    continue;
+                }
+                j+=2;
             }
         }
-
-        cout<<cn<<endl;
+        string b="";
+        for(auto i:bb){
+            b += i;
+        }
+        cout<<b;
+        cout<<endl;
     }
     return 0;
 }
