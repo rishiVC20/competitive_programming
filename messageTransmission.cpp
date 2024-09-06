@@ -52,54 +52,36 @@ ll power(ll base, ll exponent)
 
 
 int main() {
-    ll t;
-    cin>>t;
+    ll t=1;
+    // cin>>t;
     while (t--)
     {
-        ll n;
-        cin>>n;
         string s;
         cin>>s;
-        map<char,ll>mp;
-        set<char>st;
-        for(auto i:s){
-            mp[i]++;
-            st.insert(i);
-        }
-        if(st.size()==1 || st.size()==n){
-            cout<<s<<endl;
-            continue;
-        }
-        vector<pair<char,ll>>v;
-        for(auto i:mp){
-            v.pb({i.first,i.second});
-        }
-        sort(v.begin(),v.end(),[&](pair<ll,ll>a,pair<ll,ll>b){
-            return a.second>b.second;
-        });
-        ll j=0;
-        vector<char>bb(n,'-');
-        for(ll i=0; i<v.size(); i++){
-            ll k=v[i].second;
-            char m=v[i].first;
-            
-            while(k>0){
-                bb[j]=m;
-                
-                k--;
-                if(j>=n-2){
-                    j=1;
-                    continue;
-                }
-                j+=2;
+        ll n=s.size();
+        bool f=false;
+        string g;
+        for(ll i=0; i<n; i++){
+            for(ll j=1; j<=i; j++){
+                string k=s.substr(j,i-j+1);
+                string p=s.substr(i+1);
+                // cout<<k<<' '<<p<<' ';
+                if(k==p){
+                    f=true;
+                    g=s.substr(0,j)+k;
+                    break;
+                }    
             }
+            if(f)
+                break;
         }
-        string b="";
-        for(auto i:bb){
-            b += i;
+        if(f){
+            YES;
+            cout<<g<<endl;
         }
-        cout<<b;
-        cout<<endl;
+        else{
+            NO;
+        }
     }
     return 0;
 }

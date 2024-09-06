@@ -58,48 +58,36 @@ int main() {
     {
         ll n;
         cin>>n;
-        string s;
-        cin>>s;
-        map<char,ll>mp;
-        set<char>st;
-        for(auto i:s){
-            mp[i]++;
-            st.insert(i);
+        vi a;
+        ll b1=0,b2=0;
+        bool f=false;
+        for(ll i=0; i<n; i++){
+            ll x;cin>>x;
+            a.pb(x);
+            if(x>=0)
+                f=true;     
         }
-        if(st.size()==1 || st.size()==n){
-            cout<<s<<endl;
-            continue;
-        }
-        vector<pair<char,ll>>v;
-        for(auto i:mp){
-            v.pb({i.first,i.second});
-        }
-        sort(v.begin(),v.end(),[&](pair<ll,ll>a,pair<ll,ll>b){
-            return a.second>b.second;
-        });
-        ll j=0;
-        vector<char>bb(n,'-');
-        for(ll i=0; i<v.size(); i++){
-            ll k=v[i].second;
-            char m=v[i].first;
-            
-            while(k>0){
-                bb[j]=m;
-                
-                k--;
-                if(j>=n-2){
-                    j=1;
-                    continue;
-                }
-                j+=2;
+        // cout<<'l';
+        ll j=-1,k=-1;
+        for(ll i=0; i<n; i++){
+            if(a[i]>0){
+                j=i;
+                break;
             }
         }
-        string b="";
-        for(auto i:bb){
-            b += i;
+        for(ll i=n-1; i>=0; i--){
+            if(a[i]>0){
+                k=i;
+                break;
+            }
         }
-        cout<<b;
-        cout<<endl;
+        ll cn=0;
+        for(ll i=j; i<=k; i++){
+            cn += (a[i]<0);
+        }
+
+        cout<<cn<<endl;
+
     }
     return 0;
 }

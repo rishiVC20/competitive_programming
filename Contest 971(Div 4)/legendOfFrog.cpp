@@ -99,38 +99,23 @@ int main() {
     ll t;
     cin>>t;
     while (t--)
-    {
-        ll n;
-        cin>>n;
-        vector<pair<ll,ll>>v;
-        vi b;
-        for(ll i=0; i<n; i++){
-            ll x;
-            cin>>x;
-            if(x<(i+1)){
-                v.pb({i+1,x});
-                b.pb(i+1);
-            }
+    {   
+        ll x,y,k;
+        cin>>x>>y>>k;
+        ll p1=x/k;
+        p1 += (x%k!=0);
+        ll p2=y/k;
+        p2 += (y%k!=0);
+        // cout<<p1<<' '<<p2<<' ';
+        if(p1==p2){
+            cout<<p1+p2<<endl;
         }
-        // for(auto i:v)
-        //     cout<<i.first<<' '<<i.second<<' ';
-        ll cn=0;
-        for(ll i=0; i<v.size(); i++){
-            ll k=v[i].second;
-            ll up=upper_bound(b.begin(),b.end(),k)-b.begin();
-            
-            while(b[up]>=k){
-                if(up<0)
-                    break;
-                up--;
-            }
-            // cout<<up<<" ";
-            if(up>=0){
-                cn += up+1;
-            }
-
+        else if(p1>p2){
+            cout<<2*p1-1<<endl;
         }
-        cout<<cn<<endl;
+        else{
+            cout<<2*p2<<endl;
+        }
     }
     return 0;
 }

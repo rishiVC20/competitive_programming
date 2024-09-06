@@ -58,48 +58,41 @@ int main() {
     {
         ll n;
         cin>>n;
-        string s;
-        cin>>s;
-        map<char,ll>mp;
-        set<char>st;
-        for(auto i:s){
-            mp[i]++;
-            st.insert(i);
-        }
-        if(st.size()==1 || st.size()==n){
-            cout<<s<<endl;
-            continue;
-        }
-        vector<pair<char,ll>>v;
-        for(auto i:mp){
-            v.pb({i.first,i.second});
-        }
-        sort(v.begin(),v.end(),[&](pair<ll,ll>a,pair<ll,ll>b){
-            return a.second>b.second;
-        });
-        ll j=0;
-        vector<char>bb(n,'-');
-        for(ll i=0; i<v.size(); i++){
-            ll k=v[i].second;
-            char m=v[i].first;
-            
-            while(k>0){
-                bb[j]=m;
-                
-                k--;
-                if(j>=n-2){
-                    j=1;
-                    continue;
-                }
-                j+=2;
+        vi a;
+        bool f=false;
+        ll p=0;
+        for(ll i=0; i<n; i++){
+            ll x;cin>>x;
+            a.pb(x);
+            if(x<0){
+                f=true;
+                p++;
             }
         }
-        string b="";
-        for(auto i:bb){
-            b += i;
+        if(!f){
+            ll c=accumulate(a.begin(),a.end(),0);
+            cout<<c<<endl;
+            continue;
         }
-        cout<<b;
-        cout<<endl;
+        sort(a.begin(),a.end());
+        if(p%2==0){
+            ll c=0;
+            for(ll i=0; i<n; i++){
+                c += abs(a[i]);
+            }
+            cout<<c<<endl;
+        }
+        else{
+            ll c=0;
+            ll maxi=INT_MAX;
+            for(ll i=0; i<n; i++){
+                c += abs(a[i]);
+                maxi = min(maxi,abs(a[i]));
+            }
+            c -= 2*maxi;
+
+            cout<<c<<endl;
+        }
     }
     return 0;
 }

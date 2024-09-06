@@ -100,37 +100,9 @@ int main() {
     cin>>t;
     while (t--)
     {
-        ll n;
-        cin>>n;
-        vector<pair<ll,ll>>v;
-        vi b;
-        for(ll i=0; i<n; i++){
-            ll x;
-            cin>>x;
-            if(x<(i+1)){
-                v.pb({i+1,x});
-                b.pb(i+1);
-            }
-        }
-        // for(auto i:v)
-        //     cout<<i.first<<' '<<i.second<<' ';
-        ll cn=0;
-        for(ll i=0; i<v.size(); i++){
-            ll k=v[i].second;
-            ll up=upper_bound(b.begin(),b.end(),k)-b.begin();
-            
-            while(b[up]>=k){
-                if(up<0)
-                    break;
-                up--;
-            }
-            // cout<<up<<" ";
-            if(up>=0){
-                cn += up+1;
-            }
-
-        }
-        cout<<cn<<endl;
+        ll a,b;
+        cin>>a>>b;
+        cout<<b-a<<endl;
     }
     return 0;
 }

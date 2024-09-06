@@ -94,41 +94,23 @@ ll power(ll base, ll exponent)
     return ans;
 }
 
-
 int main() {
     ll t;
     cin>>t;
     while (t--)
     {
-        ll n;
-        cin>>n;
-        vector<pair<ll,ll>>v;
-        vi b;
-        for(ll i=0; i<n; i++){
-            ll x;
-            cin>>x;
-            if(x<(i+1)){
-                v.pb({i+1,x});
-                b.pb(i+1);
-            }
-        }
-        // for(auto i:v)
-        //     cout<<i.first<<' '<<i.second<<' ';
+        ll l,r;
+        cin>>l>>r;
+        vector<bool>ans(r+1,true);
         ll cn=0;
-        for(ll i=0; i<v.size(); i++){
-            ll k=v[i].second;
-            ll up=upper_bound(b.begin(),b.end(),k)-b.begin();
-            
-            while(b[up]>=k){
-                if(up<0)
-                    break;
-                up--;
+        bool f=true;
+        for(ll i=l; i<=r-2; i++){
+            if(i%2==1 && f){
+                cn++;
+                f=false;
             }
-            // cout<<up<<" ";
-            if(up>=0){
-                cn += up+1;
-            }
-
+            else if(i%2==1 && !f)
+                f=true;
         }
         cout<<cn<<endl;
     }

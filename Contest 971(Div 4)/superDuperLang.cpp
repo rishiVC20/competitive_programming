@@ -94,43 +94,43 @@ ll power(ll base, ll exponent)
     return ans;
 }
 
-
+ll check(ll i,ll j){
+    return (j*(j+1)/2)-((i-1)*i/2);
+}
 int main() {
     ll t;
     cin>>t;
     while (t--)
     {
-        ll n;
-        cin>>n;
-        vector<pair<ll,ll>>v;
-        vi b;
-        for(ll i=0; i<n; i++){
-            ll x;
-            cin>>x;
-            if(x<(i+1)){
-                v.pb({i+1,x});
-                b.pb(i+1);
+        ll n,k;
+        cin>>n>>k;
+        bool f=n%2==1 ? true:false;
+        ll p=n+k-1;
+        ll i=k,j=p;
+        ll ans=check(i,j);
+        // cout<<i<<' '<<j<<' ';
+        ll sum=INT_MAX;
+        while(i<=j){
+            ll mm=i+(j-i)/2;
+            // cout<<i<<' '<<j<<' ';
+            ll x=check(k,mm);
+            ll y=ans-x;
+            // cout<<x<<' '<<y<<' ';
+            if(x==y){
+                sum=0;
+                break;
+            }
+            if(x<y){
+                i=mm+1;
+                sum=min(sum,abs(y-x));
+            }
+            else{
+                j=mm-1;
+                sum=min(sum,abs(y-x));
             }
         }
-        // for(auto i:v)
-        //     cout<<i.first<<' '<<i.second<<' ';
-        ll cn=0;
-        for(ll i=0; i<v.size(); i++){
-            ll k=v[i].second;
-            ll up=upper_bound(b.begin(),b.end(),k)-b.begin();
-            
-            while(b[up]>=k){
-                if(up<0)
-                    break;
-                up--;
-            }
-            // cout<<up<<" ";
-            if(up>=0){
-                cn += up+1;
-            }
 
-        }
-        cout<<cn<<endl;
+        cout<<sum<<endl;
     }
     return 0;
 }
