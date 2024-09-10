@@ -103,47 +103,40 @@ int main() {
         ll n;
         cin>>n;
         vi a;
-        bool f=true;
-        bool k=true;
+        ll cn=0;
         for(ll i=0; i<n; i++){
             ll x;cin>>x;
             a.pb(x);
-            if(i!=0){
-                if(a[i]!=a[i-1])
-                    f=false;
+            cn += (x==1);            
+        }
+        vi b;
+        ll k=cn;
+        for(ll i=0; i<n; i++){
+            ll p=0;
+            ll q=i;
+            ll cn=1;
+            while(p<=q){
+                // cout<<'k';
+                ll m=q+(p-q)/2;
+                if(a[m]/(i-m+1) >= 1){
+                    cn=max(cn,i-m+1);
+                    q=m-1;
+                }else{
+                    p=m+1;
+                }
             }
-            if(i!=0){
-                if(a[i]>a[i-1])
-                    k=false;
-            }
-        }       
-        if(f || k){
-            cout<<0<<endl;
-            continue;
+            b.pb(cn);
+            // if(k==0)
+            //     k++;
         }
-        vi c,d;
-        ll i=0; 
-        while(i<n){
-            c.pb(a[i]);
-            ll k=a[i];
-            i++;
-            if(i==n)
-                break;
-            while(i < n && a[i]>k){
-                d.pb(a[i]);
-                i++;
-            }
-        }
-        ll cn=0;
-        for(ll i=0; i<c.size()-1; i++){
-            if(c[i+1]>c[i])
-                cn++;
-        }
-        for(ll i=0; i<d.size()-1; i++){
-            if(d[i+1]>d[i])
-                cn++;
-        }
-        cout<<cn<<endl;
+
+        for(auto i:b)
+            cout<<i<<' ';
+        cout<<endl;
+
+
     }
     return 0;
 }
+
+/*1 1 2 2 3 3 4 4 */

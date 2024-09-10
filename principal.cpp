@@ -100,50 +100,28 @@ int main() {
     cin>>t;
     while (t--)
     {
-        ll n;
-        cin>>n;
-        vi a;
-        bool f=true;
-        bool k=true;
-        for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            a.pb(x);
-            if(i!=0){
-                if(a[i]!=a[i-1])
-                    f=false;
-            }
-            if(i!=0){
-                if(a[i]>a[i-1])
-                    k=false;
-            }
-        }       
-        if(f || k){
-            cout<<0<<endl;
-            continue;
-        }
-        vi c,d;
-        ll i=0; 
-        while(i<n){
-            c.pb(a[i]);
-            ll k=a[i];
-            i++;
-            if(i==n)
-                break;
-            while(i < n && a[i]>k){
-                d.pb(a[i]);
-                i++;
+        int n;
+        int sum=0;
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                 if(i==j) sum+=a[i][j];
             }
         }
-        ll cn=0;
-        for(ll i=0; i<c.size()-1; i++){
-            if(c[i+1]>c[i])
-                cn++;
+        string ss=to_string(a[x][y]);
+        while(ss.size()>1)
+        {
+             int tt=0;
+             for(auto ch:str)
+             {
+                  tt+=ch-'0';
+             }
+             ss=to_string(tt);
         }
-        for(ll i=0; i<d.size()-1; i++){
-            if(d[i+1]>d[i])
-                cn++;
-        }
-        cout<<cn<<endl;
+        int r=stoi(ss);
+        return sum/r;
+
     }
     return 0;
 }
