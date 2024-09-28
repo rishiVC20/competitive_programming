@@ -100,72 +100,28 @@ int main() {
     cin>>t;
     while (t--)
     {
-        ll n;
-        cin>>n;
+        ll n,k;
+        cin>>n>>k;
         vi a;
-        bool f=true;
-        bool k=true;
         for(ll i=0; i<n; i++){
             ll x;cin>>x;
             a.pb(x);
-            if(i!=0){
-                if(a[i]!=a[i-1])
-                    f=false;
+        }
+        // sort(a.begin(),a.end());
+        ll c1=0;
+        ll c2=0;
+        for(ll i=0; i<n; i++){
+            if(a[i]>=k){
+                c1 += a[i];
             }
-            if(i!=0){
-                if(a[i]>a[i-1])
-                    k=false;
+            else if(a[i]==0){
+                if(c1>0){
+                    c1--;
+                    c2++;
+                }
             }
         }       
-        if(f || k){
-            cout<<0<<endl;
-            continue;
-        }
-        vi c,d;
-        c.pb(a[0]);
-        d.pb(INT_MAX);
-        ll j=0;
-        while(a[j]<=c.back()){
-            c.pb(a[j]);
-            j++;
-        }
-        for(ll i=j; i<n; i++){
-            if(c.back() > d.back()){
-                if(d.back() >= a[i]){
-                    d.pb(a[i]);
-                }
-                else if(a[i] > c.back()){
-                    d.pb(a[i]);
-                }
-                else{
-                    c.pb(a[i]);
-                }
-            }
-            else{
-                if(c.back() >= a[i]){
-                    c.pb(a[i]);
-                }
-                else if(a[i] > d.back()){
-                    c.pb(a[i]);
-                }
-                else{
-                    d.pb(a[i]);
-                }
-            }
-            
-        }
-        ll ans=0;
-        for(ll i=0; i<c.size()-1; i++){
-            if(c[i]<c[i+1])
-                ans++;
-        }
-        for(ll i=0; i<d.size()-1; i++){
-            if(d[i]<d[i+1])
-                ans++;
-        }
-
-        cout<<ans<<endl;
-
+        cout<<c2<<endl;
     }
     return 0;
 }

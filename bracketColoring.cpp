@@ -102,69 +102,57 @@ int main() {
     {
         ll n;
         cin>>n;
-        vi a;
-        bool f=true;
-        bool k=true;
-        for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            a.pb(x);
-            if(i!=0){
-                if(a[i]!=a[i-1])
-                    f=false;
-            }
-            if(i!=0){
-                if(a[i]>a[i-1])
-                    k=false;
-            }
-        }       
-        if(f || k){
-            cout<<0<<endl;
+        string s;
+        cin>>s;
+        // cout<<s<<' ';
+        if(n%2){
+            cout<<-1<<endl;
             continue;
-        }
-        vi c,d;
-        c.pb(a[0]);
-        d.pb(INT_MAX);
-        ll j=0;
-        while(a[j]<=c.back()){
-            c.pb(a[j]);
-            j++;
-        }
-        for(ll i=j; i<n; i++){
-            if(c.back() > d.back()){
-                if(d.back() >= a[i]){
-                    d.pb(a[i]);
-                }
-                else if(a[i] > c.back()){
-                    d.pb(a[i]);
+        }       
+        vi a;
+        ll p=0,q=0;
+        ll i=0;
+        while(i<n){
+            if(s[i]==')'){
+                if(p>0){
+                    a.pb(1);
+                    p--;
                 }
                 else{
-                    c.pb(a[i]);
+                    a.pb(2);
+                    q++;
                 }
             }
             else{
-                if(c.back() >= a[i]){
-                    c.pb(a[i]);
-                }
-                else if(a[i] > d.back()){
-                    c.pb(a[i]);
+                if(q>0){
+                    q--;
+                    a.pb(2);
                 }
                 else{
-                    d.pb(a[i]);
+                    p++;
+                    a.pb(1);
                 }
             }
-            
+            i++;
         }
-        ll ans=0;
-        for(ll i=0; i<c.size()-1; i++){
-            if(c[i]<c[i+1])
-                ans++;
+        if(p !=0 || q!=0){
+            cout<<-1<<endl;
+            continue;
         }
-        for(ll i=0; i<d.size()-1; i++){
-            if(d[i]<d[i+1])
-                ans++;
-        }
-
-        cout<<ans<<endl;
+        set<ll>st;
+        for(auto i:a)
+            st.insert(i);
+        if(st.size()==1){
+            cout<<1<<endl;
+            for(ll i=0; i<n; i++)
+                cout<<1<<' ';
+            cout<<endl;    
+            continue;    
+        }    
+        cout<<2<<endl;
+        for(auto i:a)
+            cout<<i<<' ';
+        cout<<endl;    
 
     }
     return 0;

@@ -1,3 +1,77 @@
+// // Rishikesh Chaudhari
+// #include<bits/stdc++.h>
+// using namespace std;
+
+// #define ll long long int
+// #define pb push_back 
+// #define onebit(x) __builtin_popcountll(x)
+// #define vi vector<ll>
+// #define YES cout<<'Y'<<'E'<<'S'<<endl
+// #define NO cout<<'N'<<'O'<<endl  
+
+
+
+
+// signed main() {
+//     ll t;
+//     cin>>t;
+//     while (t--)
+//     {
+//         ll n,k;
+//         cin>>n>>k;
+//         vi a;
+//         for(ll i=0; i<n; i++){
+//             ll x;cin>>x;
+//             a.pb(x);           
+//         }
+//         if(k>=3){
+//             cout<<0<<endl;
+//             continue;
+//         }
+//         sort(a.begin(),a.end());
+//         ll ans=a[0];
+//         for(ll i=0; i<n-1; i++){
+//             ans=min(ans,min(a[i],a[i+1]-a[i]));
+//         }
+//         if(k==1){
+            
+//             cout<<ans<<endl;
+//             continue;
+//         }
+
+//         ll cn=(a[0]);
+//         for(ll i=0; i<n; i++){
+//             for(ll j=0; j<i; j++){
+//                 ll v=a[i]-a[j];
+//                 // cout<<v<<' ';
+//                 ll up=lower_bound(a.begin(),a.end(),v)-a.begin();
+//                 // if(up==0){
+//                 //     // cout<<'k';
+//                 //     cn=min(cn,p);
+//                 //     continue;
+//                 // }
+//                 // cout<<up<<' ';
+//                 if(up<n){
+//                     cn=min(cn,a[up]-v);
+//                 }
+//                 if(up>0){
+//                     cn=min(cn,v-a[up-1]);
+//                 }
+//                 // cout<<cn<<' ';
+//                 // cn=min(cn,min(a[i],a[j]));
+//                 cn=min(cn,v);
+                    
+//             }
+//         }
+
+//         cout<<cn<<endl;
+
+//     }
+//     return 0;
+// }
+
+
+
 // Rishikesh Chaudhari
 #include<bits/stdc++.h>
 using namespace std;
@@ -100,72 +174,7 @@ int main() {
     cin>>t;
     while (t--)
     {
-        ll n;
-        cin>>n;
-        vi a;
-        bool f=true;
-        bool k=true;
-        for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            a.pb(x);
-            if(i!=0){
-                if(a[i]!=a[i-1])
-                    f=false;
-            }
-            if(i!=0){
-                if(a[i]>a[i-1])
-                    k=false;
-            }
-        }       
-        if(f || k){
-            cout<<0<<endl;
-            continue;
-        }
-        vi c,d;
-        c.pb(a[0]);
-        d.pb(INT_MAX);
-        ll j=0;
-        while(a[j]<=c.back()){
-            c.pb(a[j]);
-            j++;
-        }
-        for(ll i=j; i<n; i++){
-            if(c.back() > d.back()){
-                if(d.back() >= a[i]){
-                    d.pb(a[i]);
-                }
-                else if(a[i] > c.back()){
-                    d.pb(a[i]);
-                }
-                else{
-                    c.pb(a[i]);
-                }
-            }
-            else{
-                if(c.back() >= a[i]){
-                    c.pb(a[i]);
-                }
-                else if(a[i] > d.back()){
-                    c.pb(a[i]);
-                }
-                else{
-                    d.pb(a[i]);
-                }
-            }
-            
-        }
-        ll ans=0;
-        for(ll i=0; i<c.size()-1; i++){
-            if(c[i]<c[i+1])
-                ans++;
-        }
-        for(ll i=0; i<d.size()-1; i++){
-            if(d[i]<d[i+1])
-                ans++;
-        }
-
-        cout<<ans<<endl;
-
+        
     }
     return 0;
 }

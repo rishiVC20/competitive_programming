@@ -94,6 +94,65 @@ ll power(ll base, ll exponent)
     return ans;
 }
 
+ll solve(string s, ll n){
+    bool v1=true,v2=true;
+    for(ll i=0; i<n; i+=2){
+        if(s[i]!=s[0]){
+            v1=false;
+            break;
+        }
+    }
+    for(ll i=1; i<n; i+=2){
+        if(s[i]!=s[1]){
+            v2=false;
+            break;
+        }
+    }
+    if(v1 && v2)
+        return 0;
+    map<char,ll>mp1;
+    for(ll i=0; i<n; i+=2){
+        mp1[s[i]]++;
+    }
+    map<char,ll>mp2;
+    for(ll i=1; i<n; i+=2){
+        mp2[s[i]]++;
+    }
+    ll maxi1=0,maxi2=0;
+    char i1,i2;
+    for(auto i:mp1){
+        if(maxi1<i.second){
+            maxi1=i.second;
+            i1=i.first;
+        }
+    }
+    // cout<<maxi1<<' '<<i1;
+    for(auto i:mp2){
+        if(maxi2<i.second){
+            maxi2=i.second;
+            i2=i.first;
+        }
+    }
+    // cout<<i1<<' '<<i2<<' ';
+    vector<char>g(n);
+    for(ll i=0; i<n; i++){
+        if(i%2==0)
+            g[i]=i1;
+        else
+            g[i]=i2;    
+    }
+    string p="";
+    for(auto i:g){
+        p+=i;
+    }
+    // cout<<p<<' ';
+    ll cn=0;
+    for(ll i=0; i<n; i++){
+        if(p[i]!=s[i])
+            cn++;
+    }
+    return cn;
+}
 
 int main() {
     ll t;
@@ -102,70 +161,21 @@ int main() {
     {
         ll n;
         cin>>n;
-        vi a;
-        bool f=true;
-        bool k=true;
-        for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            a.pb(x);
-            if(i!=0){
-                if(a[i]!=a[i-1])
-                    f=false;
-            }
-            if(i!=0){
-                if(a[i]>a[i-1])
-                    k=false;
-            }
+        string s;
+        cin>>s;
+        if(n%2==0){
+            cout<<solve(s,n)<<endl;
         }       
-        if(f || k){
-            cout<<0<<endl;
-            continue;
-        }
-        vi c,d;
-        c.pb(a[0]);
-        d.pb(INT_MAX);
-        ll j=0;
-        while(a[j]<=c.back()){
-            c.pb(a[j]);
-            j++;
-        }
-        for(ll i=j; i<n; i++){
-            if(c.back() > d.back()){
-                if(d.back() >= a[i]){
-                    d.pb(a[i]);
-                }
-                else if(a[i] > c.back()){
-                    d.pb(a[i]);
-                }
-                else{
-                    c.pb(a[i]);
-                }
+        else{
+            ll maxi=INT_MAX;
+            for(ll i=0; i<n; i++){
+                string k=s.substr(0,i)+s.substr(i+1);
+                cout<<k<<' ';
+                ll p=solve(k,n)+1;
+                maxi=min(p,maxi);
             }
-            else{
-                if(c.back() >= a[i]){
-                    c.pb(a[i]);
-                }
-                else if(a[i] > d.back()){
-                    c.pb(a[i]);
-                }
-                else{
-                    d.pb(a[i]);
-                }
-            }
-            
+            cout<<maxi<<endl;
         }
-        ll ans=0;
-        for(ll i=0; i<c.size()-1; i++){
-            if(c[i]<c[i+1])
-                ans++;
-        }
-        for(ll i=0; i<d.size()-1; i++){
-            if(d[i]<d[i+1])
-                ans++;
-        }
-
-        cout<<ans<<endl;
-
     }
     return 0;
 }

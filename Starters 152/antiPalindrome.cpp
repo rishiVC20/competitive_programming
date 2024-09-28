@@ -100,72 +100,129 @@ int main() {
     cin>>t;
     while (t--)
     {
-        ll n;
-        cin>>n;
+        ll n,m;
+        cin>>n>>m;
         vi a;
-        bool f=true;
-        bool k=true;
         for(ll i=0; i<n; i++){
             ll x;cin>>x;
-            a.pb(x);
-            if(i!=0){
-                if(a[i]!=a[i-1])
-                    f=false;
+            a.pb(x);           
+        }
+        // vector<tuple<ll,ll,ll>>v;
+        // v.pb({0,0,0});
+        // ll x=0,y=0,z=0;
+        // for(ll i=0; i<n; i++){
+        //     x += (a[i]==1);
+        //     y += (a[i]==2);
+        //     z += (a[i]==3);
+        //     v.pb({x,y,z});
+        // }
+        // for(ll i=0; i<m; i++){
+        //     ll l,r;
+        //     cin>>l>>r;
+        //     ll b=r-l+1;
+        //     if(b%2){
+        //         NO;
+        //         continue;
+        //     }
+        //     ll s1=0,s2=0,s3=0;
+        //     // if(l>0){
+        //         s1 += get<0>(v[r])-get<0>(v[l-1]);
+        //         s2 += get<1>(v[r])-get<1>(v[l-1]);
+        //         s3 += get<2>(v[r])-get<2>(v[l-1]);
+        //     // }
+        //     // else{
+        //     //     s1 += get<0>(v[r]);
+        //     //     s2 += get<1>(v[r]);
+        //     //     s3 += get<2>(v[r]);
+        //     // }
+        //     // cout<<s1<<' '<<s2<<' '<<s3<<' ';
+        //     ll c=b/2;
+        //     if(s1>c || s2>c || s3>c){
+        //         NO;
+        //     }
+        //     else{
+        //         YES;
+        //     }
+        // }
+        vector<tuple<ll, ll, ll>> v(n + 1);
+        v[0] = {0, 0, 0};
+        ll x = 0, y = 0, z = 0;
+        for (ll i = 0; i < n; i++) {
+            x += (a[i] == 1);
+            y += (a[i] == 2);
+            z += (a[i] == 3);
+            v[i + 1] = {x, y, z};  
+        }
+        
+        for (ll i = 0; i < m; i++) {
+            ll l, r;
+            cin >> l >> r;
+            ll b = r - l + 1;
+            if (b % 2) {
+                NO;
+                continue;
             }
-            if(i!=0){
-                if(a[i]>a[i-1])
-                    k=false;
-            }
-        }       
-        if(f || k){
-            cout<<0<<endl;
-            continue;
-        }
-        vi c,d;
-        c.pb(a[0]);
-        d.pb(INT_MAX);
-        ll j=0;
-        while(a[j]<=c.back()){
-            c.pb(a[j]);
-            j++;
-        }
-        for(ll i=j; i<n; i++){
-            if(c.back() > d.back()){
-                if(d.back() >= a[i]){
-                    d.pb(a[i]);
-                }
-                else if(a[i] > c.back()){
-                    d.pb(a[i]);
-                }
-                else{
-                    c.pb(a[i]);
-                }
-            }
-            else{
-                if(c.back() >= a[i]){
-                    c.pb(a[i]);
-                }
-                else if(a[i] > d.back()){
-                    c.pb(a[i]);
-                }
-                else{
-                    d.pb(a[i]);
-                }
-            }
-            
-        }
-        ll ans=0;
-        for(ll i=0; i<c.size()-1; i++){
-            if(c[i]<c[i+1])
-                ans++;
-        }
-        for(ll i=0; i<d.size()-1; i++){
-            if(d[i]<d[i+1])
-                ans++;
-        }
+            ll s1 = get<0>(v[r]) - get<0>(v[l - 1]);
+            ll s2 = get<1>(v[r]) - get<1>(v[l - 1]);
+            ll s3 = get<2>(v[r]) - get<2>(v[l - 1]);
 
-        cout<<ans<<endl;
-
+            ll c = b / 2; 
+            if (s1 > c || s2 > c || s3 > c) {
+                NO;
+            } else {
+                YES;
+            }
+        }
     }
     return 0;
 }
+/*
+1
+6 21
+1 1 2 2 3 3
+1 1
+1 2
+1 3
+1 4
+1 5
+1 6
+2 2
+2 3
+2 4
+2 5
+2 6
+3 3
+3 4
+3 5
+3 6
+4 4
+4 5
+4 6
+5 5
+5 6
+6 6
+*/
+
+/*
+No
+No
+No
+Yes
+No
+No
+No
+Yes
+No
+Yes
+No
+No
+No
+No
+Yes
+No
+Yes
+No
+No
+No
+No
+*/

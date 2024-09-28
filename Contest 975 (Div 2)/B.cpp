@@ -100,72 +100,57 @@ int main() {
     cin>>t;
     while (t--)
     {
-        ll n;
-        cin>>n;
+        ll n,q;
+        cin>>n>>q;
         vi a;
-        bool f=true;
-        bool k=true;
         for(ll i=0; i<n; i++){
             ll x;cin>>x;
             a.pb(x);
-            if(i!=0){
-                if(a[i]!=a[i-1])
-                    f=false;
-            }
-            if(i!=0){
-                if(a[i]>a[i-1])
-                    k=false;
-            }
-        }       
-        if(f || k){
-            cout<<0<<endl;
-            continue;
         }
-        vi c,d;
-        c.pb(a[0]);
-        d.pb(INT_MAX);
-        ll j=0;
-        while(a[j]<=c.back()){
-            c.pb(a[j]);
-            j++;
+        vi b;
+        for(ll i=0; i<q; i++){
+            ll x;cin>>x;
+            b.pb(x);
         }
-        for(ll i=j; i<n; i++){
-            if(c.back() > d.back()){
-                if(d.back() >= a[i]){
-                    d.pb(a[i]);
-                }
-                else if(a[i] > c.back()){
-                    d.pb(a[i]);
-                }
-                else{
-                    c.pb(a[i]);
-                }
-            }
-            else{
-                if(c.back() >= a[i]){
-                    c.pb(a[i]);
-                }
-                else if(a[i] > d.back()){
-                    c.pb(a[i]);
-                }
-                else{
-                    d.pb(a[i]);
+        unordered_map<ll,ll>mp;
+        for(ll i=1; i<=n; i++){
+            ll p=(i-1)*(n-i+1)+(n-i);
+            mp[p]++;
+
+            if(i<n){
+                ll pp=a[i]-a[i-1]-1;
+                if(pp>0){
+                    ll kk=i*(n-i);
+                    mp[kk]+=pp;
                 }
             }
             
         }
-        ll ans=0;
-        for(ll i=0; i<c.size()-1; i++){
-            if(c[i]<c[i+1])
-                ans++;
+        for(auto i:b){
+            if(mp.find(i)!=mp.end()){
+                cout<<mp[i]<<' ';
+            }
+            else{
+                cout<<0<<' ';
+            }
         }
-        for(ll i=0; i<d.size()-1; i++){
-            if(d[i]<d[i+1])
-                ans++;
-        }
-
-        cout<<ans<<endl;
-
+        cout<<endl;
+        // vi v(n,0);
+        // for(ll i=1; i<n; i++){
+        //     ll k=a[i]-a[i-1];
+        //     v[1] += k-1;
+        //     v[i] += 1;
+        // }
+        // vi an;
+        // for(ll i=0; i<q; i++){
+        //     if(b[i]>=n)
+        //         an.pb(0);
+        //     else
+        //         an.pb(v[n-1]-v[b[i]-1]);    
+        // }
+        // for(auto i:an)
+        //     cout<<i<<' ';
+        // cout<<endl;    
     }
     return 0;
 }

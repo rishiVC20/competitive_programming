@@ -100,72 +100,69 @@ int main() {
     cin>>t;
     while (t--)
     {
-        ll n;
-        cin>>n;
-        vi a;
-        bool f=true;
-        bool k=true;
-        for(ll i=0; i<n; i++){
+        ll n,m;
+        cin>>n>>m;
+        vi a,b;
+        a.pb(1);
+        for(ll i=0; i<n-1; i++){
             ll x;cin>>x;
             a.pb(x);
-            if(i!=0){
-                if(a[i]!=a[i-1])
-                    f=false;
-            }
-            if(i!=0){
-                if(a[i]>a[i-1])
-                    k=false;
-            }
         }       
-        if(f || k){
-            cout<<0<<endl;
-            continue;
+        for(ll i=0; i<n; i++){
+            ll x;cin>>x;
+            b.pb(x);
         }
-        vi c,d;
-        c.pb(a[0]);
-        d.pb(INT_MAX);
-        ll j=0;
-        while(a[j]<=c.back()){
-            c.pb(a[j]);
-            j++;
-        }
-        for(ll i=j; i<n; i++){
-            if(c.back() > d.back()){
-                if(d.back() >= a[i]){
-                    d.pb(a[i]);
-                }
-                else if(a[i] > c.back()){
-                    d.pb(a[i]);
-                }
-                else{
-                    c.pb(a[i]);
-                }
+        sort(a.begin(),a.end());
+        sort(b.begin(),b.end());
+        // for(auto i:a)
+        //     cout<<i<<' ';
+        vector<bool>vis(n,false);
+        // ll j=-1;
+        // ll i=0;
+        // while(i<n){
+        //     // cout<<a[i]<<' ';
+        //     ll k=upper_bound(b.begin(),b.end(),a[i])-b.begin();
+        //     // cout<<k<<' ';
+        //     if(k<n && !vis[k]){
+        //         vis[k]=true;
+        //         // i++;
+        //         j=i;
+        //         // continue;
+        //     }
+        //     else{
+        //         while(k<n && vis[k]==true){
+        //             k++;
+        //         }
+        //         j=i;
+        //         // i++;
+        //         if(k<n){
+        //             vis[k]=true;
+        //         }
+        //         else{
+        //             break;
+        //         }
+        //     }
+        //     i++;
+        //     // cout<<'l';
+            
+        // }
+        // i--;
+        ll i=0,j=0;
+        while(i<n && j<n){
+            while(b[j] <= a[i] && j<n){
+                j++;
+            }
+            if(j<n){
+                i++;
             }
             else{
-                if(c.back() >= a[i]){
-                    c.pb(a[i]);
-                }
-                else if(a[i] > d.back()){
-                    c.pb(a[i]);
-                }
-                else{
-                    d.pb(a[i]);
-                }
+                break;
             }
-            
+            j++;
         }
-        ll ans=0;
-        for(ll i=0; i<c.size()-1; i++){
-            if(c[i]<c[i+1])
-                ans++;
-        }
-        for(ll i=0; i<d.size()-1; i++){
-            if(d[i]<d[i+1])
-                ans++;
-        }
-
-        cout<<ans<<endl;
-
+        // cout<<i<<' ';
+        // cout<<i<<' ';
+        cout<<n-i<<endl;
     }
     return 0;
 }

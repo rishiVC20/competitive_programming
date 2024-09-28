@@ -102,70 +102,66 @@ int main() {
     {
         ll n;
         cin>>n;
-        vi a;
-        bool f=true;
-        bool k=true;
+        vector<pair<ll,ll>>v(n);
         for(ll i=0; i<n; i++){
             ll x;cin>>x;
-            a.pb(x);
-            if(i!=0){
-                if(a[i]!=a[i-1])
-                    f=false;
-            }
-            if(i!=0){
-                if(a[i]>a[i-1])
-                    k=false;
-            }
-        }       
-        if(f || k){
-            cout<<0<<endl;
-            continue;
+            v[i].first=x;
         }
-        vi c,d;
-        c.pb(a[0]);
-        d.pb(INT_MAX);
-        ll j=0;
-        while(a[j]<=c.back()){
-            c.pb(a[j]);
-            j++;
+        for(ll i=0; i<n; i++){
+            ll x;cin>>x;
+            v[i].second=x;
         }
-        for(ll i=j; i<n; i++){
-            if(c.back() > d.back()){
-                if(d.back() >= a[i]){
-                    d.pb(a[i]);
-                }
-                else if(a[i] > c.back()){
-                    d.pb(a[i]);
-                }
-                else{
-                    c.pb(a[i]);
-                }
+        sort(v.begin(),v.end(),[&](pair<ll,ll>a,pair<ll,ll>b){
+            return a.first<b.first;
+        });
+        vi m;
+        ll maxi=-1;
+        ll cn=0;
+        for(ll i=0; i<n; i++){
+            ll c=(v[i].first)/(v[i].second);
+            if(v[i].first%v[i].second != 0)
+                c++;
+            ll p = (v[i].second)*c;    
+            m.pb(c);
+            // if(v[i].second > maxi){
+            //     cn++;
+            //     maxi=v[i].second;
+            // }    
+        }
+        // for(auto i:m){
+        //     cout<<i<<' ';
+        // }
+        bool lp=true;
+        for(ll i=0; i<n-1; i++){
+            if (v[i].first*v[i+1].second < v[i+1].first*v[i].second){
+                lp=false;
+                break;
+            }
+        }
+        // if(lp){
+        //     cout<<n<<endl;
+        //     continue;
+        // }
+        ll k=m[0];
+        stack<ll>sp;
+        for(ll i=1; i<n; i++){
+            if(m[i]<k){
+                continue;
+            }
+            else if(m[i]==k){
+                ll m=__gcd(v[i].second,k);
             }
             else{
-                if(c.back() >= a[i]){
-                    c.pb(a[i]);
-                }
-                else if(a[i] > d.back()){
-                    c.pb(a[i]);
-                }
-                else{
-                    d.pb(a[i]);
-                }
+                // cn++;
+                k=m[i];
             }
+        }
+        
+        for(ll i=0; i<n; i++){
             
         }
-        ll ans=0;
-        for(ll i=0; i<c.size()-1; i++){
-            if(c[i]<c[i+1])
-                ans++;
-        }
-        for(ll i=0; i<d.size()-1; i++){
-            if(d[i]<d[i+1])
-                ans++;
-        }
-
-        cout<<ans<<endl;
-
+        cn=sp.size();
+        cout<<cn<<endl;
     }
     return 0;
 }

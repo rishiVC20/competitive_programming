@@ -100,72 +100,43 @@ int main() {
     cin>>t;
     while (t--)
     {
-        ll n;
-        cin>>n;
-        vi a;
-        bool f=true;
-        bool k=true;
-        for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            a.pb(x);
-            if(i!=0){
-                if(a[i]!=a[i-1])
-                    f=false;
-            }
-            if(i!=0){
-                if(a[i]>a[i-1])
-                    k=false;
-            }
-        }       
-        if(f || k){
-            cout<<0<<endl;
-            continue;
+        ll n,m;
+        cin>>n>>m;
+        map<ll,ll>mp;
+        vi a(n+1,0);
+        for(ll i=0; i<m; i++){
+            ll x;
+            cin>>x;
+            a[x]++;
         }
-        vi c,d;
-        c.pb(a[0]);
-        d.pb(INT_MAX);
-        ll j=0;
-        while(a[j]<=c.back()){
-            c.pb(a[j]);
-            j++;
-        }
-        for(ll i=j; i<n; i++){
-            if(c.back() > d.back()){
-                if(d.back() >= a[i]){
-                    d.pb(a[i]);
-                }
-                else if(a[i] > c.back()){
-                    d.pb(a[i]);
+        // for(auto i:mp)
+        //     cout<<i.first<<' '<<i.second<<' ';
+        auto solve = [&](ll mi)->bool{
+            ll x=0,y=0;
+            for(ll i=1; i<=n; i++){
+                if(mi > a[i]){
+                    x += (mi-a[i])/2;
                 }
                 else{
-                    c.pb(a[i]);
+                    y += a[i]-mi;
                 }
+            }
+
+            return x >= y;
+        };
+        ll lo=1,hi=2*m;
+        ll ans=m;
+        while(lo <= hi){
+            ll mi=lo + (hi-lo)/2;
+            if(solve(mi)){
+                ans=mi;
+                hi=mi-1;
             }
             else{
-                if(c.back() >= a[i]){
-                    c.pb(a[i]);
-                }
-                else if(a[i] > d.back()){
-                    c.pb(a[i]);
-                }
-                else{
-                    d.pb(a[i]);
-                }
+                lo=mi+1;
             }
-            
         }
-        ll ans=0;
-        for(ll i=0; i<c.size()-1; i++){
-            if(c[i]<c[i+1])
-                ans++;
-        }
-        for(ll i=0; i<d.size()-1; i++){
-            if(d[i]<d[i+1])
-                ans++;
-        }
-
         cout<<ans<<endl;
-
     }
     return 0;
 }

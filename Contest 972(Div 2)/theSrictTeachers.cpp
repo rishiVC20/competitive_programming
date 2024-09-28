@@ -100,72 +100,44 @@ int main() {
     cin>>t;
     while (t--)
     {
-        ll n;
-        cin>>n;
-        vi a;
-        bool f=true;
-        bool k=true;
-        for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            a.pb(x);
-            if(i!=0){
-                if(a[i]!=a[i-1])
-                    f=false;
-            }
-            if(i!=0){
-                if(a[i]>a[i-1])
-                    k=false;
-            }
-        }       
-        if(f || k){
-            cout<<0<<endl;
-            continue;
+        ll n,m,q;
+        cin>>n>>m>>q;
+        vi a(m);
+        ll diff=INT_MAX;
+        ll p;
+        for(ll i=0; i<m; i++){
+            cin>>a[i];
         }
-        vi c,d;
-        c.pb(a[0]);
-        d.pb(INT_MAX);
-        ll j=0;
-        while(a[j]<=c.back()){
-            c.pb(a[j]);
-            j++;
-        }
-        for(ll i=j; i<n; i++){
-            if(c.back() > d.back()){
-                if(d.back() >= a[i]){
-                    d.pb(a[i]);
-                }
-                else if(a[i] > c.back()){
-                    d.pb(a[i]);
-                }
-                else{
-                    c.pb(a[i]);
-                }
+        sort(a.begin(),a.end());
+        cin>>p;
+        bool f=false;
+        if(p<a[0] || p>a[m-1])
+            f=true;
+        if(f){
+            // cout<<'k';
+            if(p<a[0]){
+                cout<<abs(1-a[0]);
             }
             else{
-                if(c.back() >= a[i]){
-                    c.pb(a[i]);
-                }
-                else if(a[i] > d.back()){
-                    c.pb(a[i]);
-                }
-                else{
-                    d.pb(a[i]);
-                }
+                cout<<abs(n-a[m-1]);
             }
-            
+            cout<<endl;
+            continue;
+        }   
+        ll x=-1,y=-1; 
+        for(ll i=0; i<m-1; i++){
+            if(p>=a[i] && p<=a[i+1]){
+                x=i;
+                y=i+1;
+                break;
+            }
         }
-        ll ans=0;
-        for(ll i=0; i<c.size()-1; i++){
-            if(c[i]<c[i+1])
-                ans++;
-        }
-        for(ll i=0; i<d.size()-1; i++){
-            if(d[i]<d[i+1])
-                ans++;
-        }
+        ll k1=abs(a[x]-a[y])/2  ;
+        ll pq=k1/2+(k1%2!=0);
+        cout<<k1<<endl;
 
-        cout<<ans<<endl;
-
+        // cout<<diff<<endl;
+               
     }
     return 0;
 }

@@ -103,69 +103,28 @@ int main() {
         ll n;
         cin>>n;
         vi a;
-        bool f=true;
-        bool k=true;
         for(ll i=0; i<n; i++){
-            ll x;cin>>x;
+            ll x;
+            cin>>x;
             a.pb(x);
-            if(i!=0){
-                if(a[i]!=a[i-1])
-                    f=false;
-            }
-            if(i!=0){
-                if(a[i]>a[i-1])
-                    k=false;
-            }
-        }       
-        if(f || k){
-            cout<<0<<endl;
+        }
+        if(n<=2){
+            cout<<-1<<endl;
             continue;
         }
-        vi c,d;
-        c.pb(a[0]);
-        d.pb(INT_MAX);
-        ll j=0;
-        while(a[j]<=c.back()){
-            c.pb(a[j]);
-            j++;
+        sort(a.begin(),a.end());
+        ll k=a[n/2];
+        ll sum=accumulate(a.begin(),a.end(),0LL);
+        ll b=sum;
+        sum /= 2*n;
+        ll m=k*2*n;
+        // cout<<sum<<' '<<m<<' ';
+        if(m>=b){
+            cout<<m-b+1<<endl;
         }
-        for(ll i=j; i<n; i++){
-            if(c.back() > d.back()){
-                if(d.back() >= a[i]){
-                    d.pb(a[i]);
-                }
-                else if(a[i] > c.back()){
-                    d.pb(a[i]);
-                }
-                else{
-                    c.pb(a[i]);
-                }
-            }
-            else{
-                if(c.back() >= a[i]){
-                    c.pb(a[i]);
-                }
-                else if(a[i] > d.back()){
-                    c.pb(a[i]);
-                }
-                else{
-                    d.pb(a[i]);
-                }
-            }
-            
+        else{
+            cout<<0<<endl;
         }
-        ll ans=0;
-        for(ll i=0; i<c.size()-1; i++){
-            if(c[i]<c[i+1])
-                ans++;
-        }
-        for(ll i=0; i<d.size()-1; i++){
-            if(d[i]<d[i+1])
-                ans++;
-        }
-
-        cout<<ans<<endl;
-
     }
     return 0;
 }

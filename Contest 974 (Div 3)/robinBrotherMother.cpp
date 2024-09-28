@@ -100,71 +100,36 @@ int main() {
     cin>>t;
     while (t--)
     {
-        ll n;
-        cin>>n;
-        vi a;
-        bool f=true;
-        bool k=true;
-        for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            a.pb(x);
-            if(i!=0){
-                if(a[i]!=a[i-1])
-                    f=false;
-            }
-            if(i!=0){
-                if(a[i]>a[i-1])
-                    k=false;
-            }
-        }       
-        if(f || k){
-            cout<<0<<endl;
-            continue;
+        ll n,d,k;
+        cin>>n>>d>>k;
+        vi a(n+100,0);
+        for(ll i=0; i<k; i++){
+            ll l,r;
+            cin>>l>>r;
+            ll p1=max(1LL,l-d+1);
+            ll p2=min(n-d+1,r);
+            a[p1]++;
+            a[p2+1]--;
         }
-        vi c,d;
-        c.pb(a[0]);
-        d.pb(INT_MAX);
-        ll j=0;
-        while(a[j]<=c.back()){
-            c.pb(a[j]);
-            j++;
+        // for(auto i: a)
+        //     cout<<i<<' ';
+        for(ll i=1; i<=n-d+1; i++){
+            a[i] += a[i-1];
         }
-        for(ll i=j; i<n; i++){
-            if(c.back() > d.back()){
-                if(d.back() >= a[i]){
-                    d.pb(a[i]);
-                }
-                else if(a[i] > c.back()){
-                    d.pb(a[i]);
-                }
-                else{
-                    c.pb(a[i]);
-                }
+        ll bro=-1, mo=1e18;
+        ll b=1,c=1;
+        for(ll i=1; i<=n-d+1; i++){
+            if(a[i]>bro){
+                bro=a[i];
+                b=i;
             }
-            else{
-                if(c.back() >= a[i]){
-                    c.pb(a[i]);
-                }
-                else if(a[i] > d.back()){
-                    c.pb(a[i]);
-                }
-                else{
-                    d.pb(a[i]);
-                }
+            if(a[i]<mo){
+                mo=a[i];
+                c=i;
             }
-            
-        }
-        ll ans=0;
-        for(ll i=0; i<c.size()-1; i++){
-            if(c[i]<c[i+1])
-                ans++;
-        }
-        for(ll i=0; i<d.size()-1; i++){
-            if(d[i]<d[i+1])
-                ans++;
         }
 
-        cout<<ans<<endl;
+        cout<<b<<' '<<c<<endl;
 
     }
     return 0;
