@@ -100,28 +100,43 @@ int main() {
     cin>>t;
     while (t--)
     {
-        ll n,k;
-        cin>>n>>k;
-        vi a;
-        ll s1=0;
-        priority_queue<ll,vi,greater<ll>>pq;
+        ll n,m,q;
+        cin>>n>>m>>q;
+        vi a,b;
         for(ll i=0; i<n; i++){
             ll x;cin>>x;
             a.pb(x);
-            s1 += x;
-            pq.push(x);
+        }       
+        for(ll i=0; i<m; i++){
+            ll x;cin>>x;
+            b.pb(x);
         }
-        if(s1%2==0){
-
+        
+        set<ll>st;
+        vi c;
+        for(ll i=0; i<m; i++){
+            if(st.find(b[i])==st.end()){
+                st.insert(b[i]);
+                c.pb(b[i]);
+            }
         }
-        ll m=pq.top();
-        cout<<m<<' ';
-        pq.pop();
-        // while(k>0){
+        // for(auto i:c)
+        //     cout<<i<<' ';
+        ll k=min(c.size(),a.size());
+        ll i=0,j=0;
+        bool f=true;
 
-        //     k--;
-        // }
-
+        while(i<n && j<c.size()){
+            if(a[i] != c[j]){
+                f=false;
+                break;
+            }
+            i++,j++;
+        }
+        if(f)
+            cout<<"YA"<<endl;
+        else
+            cout<<"TIDAK"<<endl;    
     }
     return 0;
 }

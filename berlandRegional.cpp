@@ -100,27 +100,45 @@ int main() {
     cin>>t;
     while (t--)
     {
-        ll n,k;
-        cin>>n>>k;
-        vi a;
-        ll s1=0;
-        priority_queue<ll,vi,greater<ll>>pq;
+        ll n;
+        cin>>n;
+        vi a,b;
+        map<ll,ll>mp;
+        unordered_map<ll,vi>v;
+        for(ll i=1; i<=n; i++)
+            mp[i]=0;
         for(ll i=0; i<n; i++){
             ll x;cin>>x;
             a.pb(x);
-            s1 += x;
-            pq.push(x);
+            mp[x]++;
+        }       
+        for(ll i=0; i<n; i++){
+            ll x;cin>>x;
+            b.pb(x);
+            v[a[i]].pb(x);
         }
-        if(s1%2==0){
+        for(auto i:v){
+            ll k=i.first;
+            sort(v[k].rbegin(),v[k].rend());
+        }
+        
+        for(ll i=1; i<=n; i++){
+            ll cn=0;
+            for(auto j:v){
+                ll k1=j.first;
+                vi m=j.second;
+                ll sz=m.size();
+                ll p=sz/i;
+                if(p>0){
+                    ll kk=accumulate(m.begin(),m.begin()+i*p,0LL);
+                    cn +=kk;
+                }
             
+            }
+            cout<<cn<<' ';
         }
-        ll m=pq.top();
-        cout<<m<<' ';
-        pq.pop();
-        // while(k>0){
 
-        //     k--;
-        // }
+        cout<<endl;
 
     }
     return 0;

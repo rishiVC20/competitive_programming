@@ -100,28 +100,77 @@ int main() {
     cin>>t;
     while (t--)
     {
-        ll n,k;
-        cin>>n>>k;
-        vi a;
-        ll s1=0;
-        priority_queue<ll,vi,greater<ll>>pq;
-        for(ll i=0; i<n; i++){
+        ll n,m;
+        cin>>n>>m;
+        vector<pair<ll,ll>>a,b;
+        for(ll i=0; i<n+m+1; i++){
             ll x;cin>>x;
-            a.pb(x);
-            s1 += x;
-            pq.push(x);
+            a.pb({i+1,x});
+        }       
+        for(ll i=0; i<n+m+1; i++){
+            ll x;cin>>x;
+            b.pb({i+1,x});
         }
-        if(s1%2==0){
-            
+        sort(b.begin(),b.end(),customComparator);
+        sort(a.begin(),a.end(),customComparator);
+
+        vi u,v;
+        unordered_set<ll>x,y;
+        ll p=0;
+        ll cc=0,dd=0;
+        while(p<(n+m+1)){
+            if(a[p].second>=b[p].second){
+                if(cc<n){
+                    u.pb(a[p].second);
+                    x.insert(a[p].first);
+                    cc++;
+                }
+                else{
+                    v.pb(b[p].second);
+                    y.insert(b[p].first);
+                    dd++;
+                }
+            }
+            else{
+                if(dd<m){
+                    v.pb(b[p].second);
+                    y.insert(b[p].first);
+                    dd++;
+                }
+                else{
+                    u.pb(a[p].second);
+                    x.insert(a[p].first);
+                    cc++;
+                }
+            }
+            p++;
         }
-        ll m=pq.top();
-        cout<<m<<' ';
-        pq.pop();
-        // while(k>0){
+        ll s1=accumulate(u.begin(),u.end(),0LL);
+        ll s2=accumulate(v.begin(),v.end(),0LL);
+        ll j=max(n,m);
+        
+        for(auto i:u)
+            cout<<i<<' ';
+        for(auto i:v)
+            cout<<i<<' ';    
+        ll cn=0;
+        for(ll i=0; i<n+m+1; i++){
+            ll ck=0;
+            ck += s1+s2;
+            if(x.find(i+1)!=x.end()){
+                ll k=a[i+1].second;
+                ck -= k;
+                ck += u.back();
+            }
+            else if(y.find(i+1)!=y.end()){
+                ll k=b[i+1].second;
+                ck -= k;
+                ck += v.back();
+            }
 
-        //     k--;
-        // }
-
+           cout<<ck<<' '; 
+        }
+        cout<<endl;
     }
     return 0;
 }

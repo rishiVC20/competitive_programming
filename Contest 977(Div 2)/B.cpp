@@ -11,6 +11,50 @@
 
 // const ll mod = 1e9+7;
 
+// class Disjoint{
+//     vector<ll>size,rank,parent;
+// public:
+//     Disjoint(ll n){
+//         size.resize(n+1,1);
+//         parent.resize(n+1);
+//         rank.resize(n+1,0);
+//         for(ll i=0; i<=n; i++)
+//             parent[i]=i;
+//     }
+//     ll findParent(ll node){
+//         if(node==parent[node])
+//             return node;
+//         return parent[node]=(findParent(parent[node]));
+//     }
+//     void unionByRank(ll u, ll v){
+//         ll ulp_u=findParent(u);
+//         ll ulp_v=findParent(v);
+//         if(ulp_u == ulp_v) return;
+//         if(rank[ulp_u]<rank[ulp_v]){
+//             parent[ulp_u]=ulp_v;
+//         }
+//         else if(rank[ulp_u]>rank[ulp_v]){
+//             parent[ulp_v]=ulp_u;
+//         }
+//         else{
+//             parent[ulp_v]=ulp_u;
+//             rank[ulp_u]++;
+//         }
+//     }
+//     void unionBySize(ll u, ll v){
+//         ll ulp_u=findParent(u);
+//         ll ulp_v=findParent(v);
+//         if(ulp_u == ulp_v) return;
+//         if(size[ulp_u]<size[ulp_v]){
+//             parent[ulp_u]=ulp_v;
+//             size[ulp_v]+=size[ulp_u];
+//         }
+//         else{
+//             parent[ulp_v]=ulp_u;
+//             size[ulp_u]+=size[ulp_v];
+//         }
+//     }
+// };
 // ll mul (ll a, ll b, ll m=mod)
 // {
 //     a = a % m;
@@ -56,53 +100,47 @@
 //     cin>>t;
 //     while (t--)
 //     {
-//         ll n;
-//         cin>>n;
+//         ll n,x;
+//         cin>>n>>x;
 //         vi a;
-//         bool f=true;
+//         map<ll,ll>mp;
 //         for(ll i=0; i<n; i++){
-//             ll x;cin>>x;
-//             a.pb(x);
-//             if(x<=0)
-//                 f=false;
+//             ll y;cin>>y;
+//             a.pb(y);
+//             mp[y]++;
+//         }
+//         sort(a.begin(),a.end());
+
+//         for(ll i=0; i<n; i++){
+//             if(mp[a[i]]>1){
+//                 ll u=mp[a[i]]-1;
+//                 mp[a[i]]--;
+//                 a[i] += u*x;
+//                 cout<<a[i]<<' ';
+//                 mp[a[i]]++;
+//             }
+//             else{
+//                 cout<<a[i]<<' ';
+//             }
 //         }       
-//         if(f){
-//             YES;
-//             continue;
-//         }
-//         ll sum1=accumulate(a.begin(),a.end(),0);
-//         ll maxi=0;
-//         ll sum=0;
-//         int v=0;
-//         f=true;
+//         sort(a.begin(),a.end());
+//         // for(auto i:a)
+//         //     cout<<i<<' ';
+//         ll j=-1;
 //         for(ll i=0; i<n; i++){
-//             maxi += a[i];
-//             // cout<<maxi<<' ';
-//             if(maxi<=0){
-//                 f=false;
+//             if(a[i]!=i){
+//                 j=i;
 //                 break;
 //             }
 //         }
-//         if(!f){
-//             NO;
-//             continue;
-//         }
-//         for(ll i=n-1; i>=0; i--){
-//             sum += a[i];
-//             if(sum<=0){
-//                 f=false;
-//                 break;
-//             }
-//         }
-//         if(!f){
-//             NO;
-//         }
-//         else{
-//             YES;
-//         }
+//         if(j==-1)
+//             j=n;
+//         cout<<j<<endl;    
 //     }
 //     return 0;
 // }
+
+
 
 // Rishikesh Chaudhari
 #include<bits/stdc++.h>
@@ -206,54 +244,68 @@ int main() {
     cin>>t;
     while (t--)
     {
-        ll n;
-        cin>>n;
+        ll n,x;
+        cin>>n>>x;
         vi a;
-        bool f=true;
+        map<ll,ll>mp;
         for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            a.pb(x);
-            if(x<0)
-                f=false;
-        }
-        if(f){
-            YES;
-            continue;
-        }
-        ll maxi=0;
-        ll curr=0;
-        ll s=accumulate(a.begin(),a.end(),0LL);
-        bool k=true;
-        for(ll i=0; i<n-1; i++){
-            curr+=a[i];
-            maxi=max(maxi,curr);
-            if(curr<0)
-                curr=0;
-            if(maxi>=s){
-                k=false;
+            ll y;cin>>y;
+            a.pb(y);
+            mp[y]++;
+        }       
+        vi b;
+        map<ll,ll>c;
+        sort(a.begin(),a.end());
+        ll cn=0;
+        // for(ll i=0; i<n; i++){
+        //     if(mp[i] > 0){
+        //         // cout<<i<<' ';
+        //         mp[i]--;
+        //         ll k=mp[i];
+        //         if(k>0)
+        //             c[i%x]=k;
+        //         cn++;
+        //     }
+        //     else if(c[i%x] > 0){
+        //         // cout<<i<<' ';
+        //         c[i%x]--;
+        //         cn++;
+        //     }
+        //     else{
+        //         break;
+        //     }
+        // }
+        while(true){
+            if(mp[cn] > 0){
+                mp[cn]--;
+                ll k=mp[cn];
+                for(ll j=0; j<k; j++)
+                    c[cn%x]++;
+                cn++;
+            }
+            else if(c[cn%x]>0){
+                c[cn%x]--;
+                cn++;
+            }
+            else{
                 break;
-            }    
-        }
-        if(!k){
-            NO;
-            continue;
-        }
-        maxi=0,curr=0;
-        for(ll i=n-2; i>=0; i--){
-            curr+=a[i];
-            maxi=max(maxi,curr);
-            if(curr<0)
-                curr=0;
-            if(maxi>=s){
-                k=false;
-                break;
-            }    
-        }
-        if(!k)
-            NO;
-        else
-            YES;    
+            }
 
+        }
+        cout<<cn<<endl;
+        // sort(b.begin(),b.end());
+        // for(auto i:b)
+        //     cout<<i<<' ';
+        // ll j=-1;
+        // for(ll i=0; i<b.size(); i++){
+        //     if(b[i]!=i){
+        //         j=i;
+        //         break;
+        //     }
+        // }
+        // if(j==-1)
+        //     j=n;
+        // cout<<j<<endl;    
     }
     return 0;
 }

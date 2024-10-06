@@ -102,26 +102,23 @@ int main() {
     {
         ll n,k;
         cin>>n>>k;
-        vi a;
-        ll s1=0;
-        priority_queue<ll,vi,greater<ll>>pq;
-        for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            a.pb(x);
-            s1 += x;
-            pq.push(x);
+        if(k==1 || n==1){
+            cout<<n<<endl;
+            continue;
         }
-        if(s1%2==0){
+        if(k>n){
+            cout<<n<<endl;
+            continue;
+        }
+
+        ll cn=0;
+        while(n>0){
+            cn += n%k;
+            n /= k;
             
         }
-        ll m=pq.top();
-        cout<<m<<' ';
-        pq.pop();
-        // while(k>0){
 
-        //     k--;
-        // }
-
+        cout<<cn<<endl;
     }
     return 0;
 }

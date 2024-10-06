@@ -100,28 +100,25 @@ int main() {
     cin>>t;
     while (t--)
     {
-        ll n,k;
-        cin>>n>>k;
-        vi a;
-        ll s1=0;
-        priority_queue<ll,vi,greater<ll>>pq;
-        for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            a.pb(x);
-            s1 += x;
-            pq.push(x);
-        }
-        if(s1%2==0){
-            
-        }
-        ll m=pq.top();
-        cout<<m<<' ';
-        pq.pop();
-        // while(k>0){
+        ll k;
+        cin>>k;
+        ll lo=1,hi=4e18;
+        ll ans=-1;
+        // cout<<sqrt(k)<<' ';
+        while(lo <= hi){
+            ll mi=lo+(hi-lo)/2;
+            ll p=mi-(ll)sqrt(mi);
+            // cout<<mi<<" "<<(ll)sqrtl(mi)<<' ';
+            if(p<k){
+                lo=mi+1;
+            }
+            else{
+                ans=mi;
+                hi=mi-1;
+            }
+        }       
 
-        //     k--;
-        // }
-
+        cout<<ans<<endl;
     }
     return 0;
 }

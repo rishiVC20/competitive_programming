@@ -94,34 +94,64 @@ ll power(ll base, ll exponent)
     return ans;
 }
 
+void solve(vi a, ll pos, bool &f, ll &d, ll op, ll req, ll n){
+    if(pos==n){
+        if(d==req)
+            f=1;
+        return;
+    }
+    if(d==req){
+        f=1;
+        return;
+    }    
+    if(op==1)
+        d += a[pos];
+    else
+        d ^= a[pos];
+
+    solve(a,pos+1,f,d,1,req,n);       
+    // d-=a[pos]; 
+    solve(a,pos+1,f,d,2,req,n);        
+}
 
 int main() {
     ll t;
     cin>>t;
     while (t--)
     {
-        ll n,k;
-        cin>>n>>k;
+        ll n,x,y;
+        cin>>n>>x>>y;
+        bool f=0;
         vi a;
-        ll s1=0;
-        priority_queue<ll,vi,greater<ll>>pq;
         for(ll i=0; i<n; i++){
             ll x;cin>>x;
             a.pb(x);
-            s1 += x;
-            pq.push(x);
+        }       
+        ll cn=0;
+        // solve(a,0,f,x,1,y,n);
+        // solve(a,0,f,x,2,y,n);
+        if(x%2)
+            f=0;
+        else
+            f=1;        
+        for(ll i=0; i<n; i++){
+            if(f==0 && a[i]%2!=0)
+                f=1;
+            else if(f==1 && a[i]%2!=0)
+                f=0;    
+            // cout<<f<<' ';    
         }
-        if(s1%2==0){
-            
-        }
-        ll m=pq.top();
-        cout<<m<<' ';
-        pq.pop();
-        // while(k>0){
-
-        //     k--;
-        // }
-
+        bool h;
+        if(y%2)
+            h=0;
+        else
+            h=1;
+        // cout<<f<<' '<<h<<' ';
+        if(f == h){
+            cout<<"Alice"<<endl;
+        }        
+        else
+            cout<<"Bob"<<endl;
     }
     return 0;
 }

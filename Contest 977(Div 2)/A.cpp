@@ -100,28 +100,20 @@ int main() {
     cin>>t;
     while (t--)
     {
-        ll n,k;
-        cin>>n>>k;
+        ll n;
+        cin>>n;
         vi a;
-        ll s1=0;
-        priority_queue<ll,vi,greater<ll>>pq;
         for(ll i=0; i<n; i++){
             ll x;cin>>x;
             a.pb(x);
-            s1 += x;
-            pq.push(x);
         }
-        if(s1%2==0){
-            
+        sort(a.begin(),a.end());
+        ll k=(a[0]+a[1])/2;
+        for(ll i=2; i<n; i++){
+            k=(k+a[i])/2;
         }
-        ll m=pq.top();
-        cout<<m<<' ';
-        pq.pop();
-        // while(k>0){
-
-        //     k--;
-        // }
-
+        cout<<k<<endl;
+        
     }
     return 0;
 }
