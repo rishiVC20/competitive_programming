@@ -100,51 +100,32 @@ int main() {
     cin>>t;
     while (t--)
     {
-        ll n;
-        cin>>n;
-        vi a,b;
-        unordered_map<ll,vi>v;
-        for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            x--;
-            a.pb(x);
-        }       
-        for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            b.pb(x);
-            v[a[i]].pb(x);
-        }
+        ll n,m;
+        cin>>n>>m;
+        vector<vi> a(n,vi(m,0));
 
-        vector<vi>mm;
-        for(auto i:v){
-            vi j=i.second;
-            sort(j.rbegin(),j.rend());
-            mm.pb(j);
-        }   
-        vector<vi>z;
-        for(auto i:mm){
-            vi d;
-            for(ll j=0; j<i.size(); j++){
-                if(j==0)
-                    d.pb(i[0]);
-                else
-                    d.pb(d.back()+i[j]);    
-            }
-            z.pb(d);
+        for(ll i=0; i<min(n,m); i++){
+            a[i][i]=3;
         }
-        vi g(n,0);
-        for(auto i:z){
-            for(ll j=1; j<=i.size(); j++){
-                ll k=(i.size()/j)*j;
-                if(i.size()/j > 0)
-                        g[j-1]+=i[k-1];
+        if(n>m){
+            ll k=m;
+            for(ll i=m; i<n; i++){
+                a[i][0]=3;
             }
         }
-        for(auto i:g)
-            cout<<i<<' ';
-        cout<<endl;    
-
-
+        else{
+            for(ll i=n; i<m; i++){
+                a[0][i]=3;  
+            }
+        }
+        for(ll i=0; i<n; i++){
+            for(ll j=0; j<m; j++){
+                if(a[i][j]==0)
+                    a[i][j]=2;
+                cout<<a[i][j]<<' ';    
+            }
+            cout<<endl;
+        }
     }
     return 0;
 }

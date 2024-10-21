@@ -96,55 +96,39 @@ ll power(ll base, ll exponent)
 
 
 int main() {
-    ll t;
-    cin>>t;
-    while (t--)
+    ll tt;
+    cin>>tt;
+    while (tt--)
     {
         ll n;
         cin>>n;
-        vi a,b;
-        unordered_map<ll,vi>v;
+        vector<pair<ll,ll>>v;
         for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            x--;
-            a.pb(x);
-        }       
+            ll x,y;
+            cin>>x>>y;
+            v.pb({x,y});
+        }
+        vector<pair<ll,ll>>t;
+        vector<tuple<ll,ll,ll>>m;
         for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            b.pb(x);
-            v[a[i]].pb(x);
+            ll k=v[i].first;
+            ll q=v[i].second;
+            t.pb({min(k,q),max(k,q)});
+            m.pb(make_tuple(min(k,q),max(k,q),i));
         }
 
-        vector<vi>mm;
-        for(auto i:v){
-            vi j=i.second;
-            sort(j.rbegin(),j.rend());
-            mm.pb(j);
-        }   
-        vector<vi>z;
-        for(auto i:mm){
-            vi d;
-            for(ll j=0; j<i.size(); j++){
-                if(j==0)
-                    d.pb(i[0]);
-                else
-                    d.pb(d.back()+i[j]);    
+        sort(m.begin(), m.end(), [](const tuple<ll, ll, ll>& a, const tuple<ll, ll, ll>& b) {
+            if (get<0>(a) == get<0>(b)) {
+                return get<1>(a) < get<1>(b);
             }
-            z.pb(d);
+            return get<0>(a) < get<0>(b);  
+        });
+        for(ll i=0; i<n; i++){
+            ll p=get<2>(m[i]);
+            cout<<v[p].first<<' '<<v[p].second<<' ';
         }
-        vi g(n,0);
-        for(auto i:z){
-            for(ll j=1; j<=i.size(); j++){
-                ll k=(i.size()/j)*j;
-                if(i.size()/j > 0)
-                        g[j-1]+=i[k-1];
-            }
-        }
-        for(auto i:g)
-            cout<<i<<' ';
-        cout<<endl;    
 
-
+        cout<<endl;
     }
     return 0;
 }

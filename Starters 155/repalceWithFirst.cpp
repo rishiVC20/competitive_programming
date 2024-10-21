@@ -94,56 +94,98 @@ ll power(ll base, ll exponent)
     return ans;
 }
 
+bool check(string s1,string s2, ll k){
+    ll p=s2.size()-k;
+    string m=s2.substr(k);
+    ll b=m.size();
+    string h="";
+    ll j=0;
+    ll c=s1.size()-1;
+    while(j != b){
+        h = s1[c]+h;
+        c--;
+        j++;
+    }
+    if(h==m)
+        return true;
+    return false;    
+}
 
 int main() {
-    ll t;
-    cin>>t;
-    while (t--)
+    ll tt;
+    cin>>tt;
+    while (tt--)
     {
-        ll n;
-        cin>>n;
-        vi a,b;
-        unordered_map<ll,vi>v;
-        for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            x--;
-            a.pb(x);
-        }       
-        for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            b.pb(x);
-            v[a[i]].pb(x);
-        }
+        ll n,m;
+        cin>>n>>m;
 
-        vector<vi>mm;
-        for(auto i:v){
-            vi j=i.second;
-            sort(j.rbegin(),j.rend());
-            mm.pb(j);
-        }   
-        vector<vi>z;
-        for(auto i:mm){
-            vi d;
-            for(ll j=0; j<i.size(); j++){
-                if(j==0)
-                    d.pb(i[0]);
-                else
-                    d.pb(d.back()+i[j]);    
-            }
-            z.pb(d);
+        string s,t;
+        cin>>s>>t;
+        if(s[0] != t[0]){
+            cout<<-1<<endl;
+            continue;
         }
-        vi g(n,0);
-        for(auto i:z){
-            for(ll j=1; j<=i.size(); j++){
-                ll k=(i.size()/j)*j;
-                if(i.size()/j > 0)
-                        g[j-1]+=i[k-1];
+        bool f=true;
+        if(n==m && t==s){
+            cout<<0<<endl;
+            continue;
+        }
+        ll j=-1;
+        string x="",y="";
+        for(ll i=0; i<min(n,m); i++){
+            if(s[i] != t[i]){
+                j=i;
+                // if(i+1<n)
+                //     x=s.substr(i);
+                // if(j+1<m)    
+                //     y=t.substr(i);
+                break;
             }
         }
-        for(auto i:g)
-            cout<<i<<' ';
-        cout<<endl;    
+        if(j==-1 && n!=m){
+            cout<<1<<endl;
+            continue;
+        }
 
+        if(n>m){
+            if(check(s,t,j)){
+                cout<<1<<endl;
+                continue;
+            }
+        }
+        else if(m>n){
+            if(check(t,s,j)){
+                cout<<1<<endl;
+                continue;
+            }
+        }
+
+        cout<<2<<endl;
+        // if(x=="" || y==""){
+        //     cout<<1<<endl;
+        //     continue;
+        // }
+        // ll k1=x.size(),k2=y.size();
+        // bool f=false;
+        // string h1,h2;
+        // for(ll i=j+1; i<n; i++){
+        //     if(s[i] == t[j]){
+        //         if(i+k2 < n){
+        //             h1=x.substr(i,k2);
+        //         }
+        //         if(i+k1 < m){
+        //             h2=y.substr(i,k1);
+        //         }
+        //         if(h1!="" && h2!=""){
+        //             f=true;
+        //             break;
+        //         }
+        //     }
+        // }
+        // if(f){
+            
+        // }
+        
 
     }
     return 0;

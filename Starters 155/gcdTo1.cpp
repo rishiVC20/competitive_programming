@@ -94,57 +94,69 @@ ll power(ll base, ll exponent)
     return ans;
 }
 
+vector<bool>prime(1e5,true);
+vi ans;
+void sieve(){
+    for(ll i=2; i*i<1e5; i++){
+        if(prime[i]==true){
+            for(ll j=i*i; j<1e5; j+=i){
+                prime[j]=false;
+            }
+        }
+    }
+    for(ll i=2; i<prime.size(); i++){
+        if(prime[i]==true){
+            ans.pb(i);
+        }
+    }
+}
 
 int main() {
     ll t;
     cin>>t;
+    sieve();
+    // for(ll i=0; i<10; i++)
+    //     cout<<ans[i]<<' ';
+    // cout<<endl;    
     while (t--)
     {
-        ll n;
-        cin>>n;
-        vi a,b;
-        unordered_map<ll,vi>v;
+        ll n,m;
+        cin>>n>>m;
+        vector<vi>a(n,vi(m,0));
+        vi b,c;
+        ll k=2;
+        ll d=2;
+        b.pb(k);
+        for(ll i=1; i<m; i++){
+            ll m=k*d+1;
+            b.pb(m);
+            d++;
+        }
+        k=3;
+        d=2;
+        c.pb(k);
+        for(ll i=1; i<m; i++){
+            ll m=k*d+1;
+            c.pb(m);
+            d++;
+        }
         for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            x--;
-            a.pb(x);
-        }       
-        for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            b.pb(x);
-            v[a[i]].pb(x);
+            if(i%2==0){
+                for(auto j:b)
+                    cout<<j<<' ';
+            }
+            else{
+                for(auto j:c)
+                    cout<<j<<' ';
+            }
+            cout<<endl;
         }
 
-        vector<vi>mm;
-        for(auto i:v){
-            vi j=i.second;
-            sort(j.rbegin(),j.rend());
-            mm.pb(j);
-        }   
-        vector<vi>z;
-        for(auto i:mm){
-            vi d;
-            for(ll j=0; j<i.size(); j++){
-                if(j==0)
-                    d.pb(i[0]);
-                else
-                    d.pb(d.back()+i[j]);    
-            }
-            z.pb(d);
-        }
-        vi g(n,0);
-        for(auto i:z){
-            for(ll j=1; j<=i.size(); j++){
-                ll k=(i.size()/j)*j;
-                if(i.size()/j > 0)
-                        g[j-1]+=i[k-1];
-            }
-        }
-        for(auto i:g)
-            cout<<i<<' ';
-        cout<<endl;    
+        
 
 
     }
     return 0;
 }
+
+boi

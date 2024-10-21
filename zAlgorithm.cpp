@@ -96,55 +96,28 @@ ll power(ll base, ll exponent)
 
 
 int main() {
-    ll t;
-    cin>>t;
-    while (t--)
+    ll tt=1;
+    // cin>>tt;
+    while (tt--)
     {
         ll n;
         cin>>n;
-        vi a,b;
-        unordered_map<ll,vi>v;
-        for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            x--;
-            a.pb(x);
+        string s;
+        cin>>s;
+        vi z(n,0);
+        ll x=0,y=0;
+        for(ll i=1; i<n; i++){
+            z[i] = max(0LL,min(z[i-x],y-i+1));
+
+            while (i+z[i]<n && s[z[i]]==s[i+z[i]]){
+                x=i;
+                y=i+z[i];
+                z[i]++;
+            }
         }       
-        for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            b.pb(x);
-            v[a[i]].pb(x);
-        }
 
-        vector<vi>mm;
-        for(auto i:v){
-            vi j=i.second;
-            sort(j.rbegin(),j.rend());
-            mm.pb(j);
-        }   
-        vector<vi>z;
-        for(auto i:mm){
-            vi d;
-            for(ll j=0; j<i.size(); j++){
-                if(j==0)
-                    d.pb(i[0]);
-                else
-                    d.pb(d.back()+i[j]);    
-            }
-            z.pb(d);
-        }
-        vi g(n,0);
-        for(auto i:z){
-            for(ll j=1; j<=i.size(); j++){
-                ll k=(i.size()/j)*j;
-                if(i.size()/j > 0)
-                        g[j-1]+=i[k-1];
-            }
-        }
-        for(auto i:g)
+        for (auto i:z)
             cout<<i<<' ';
-        cout<<endl;    
-
-
     }
     return 0;
 }

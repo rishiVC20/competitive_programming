@@ -96,53 +96,55 @@ ll power(ll base, ll exponent)
 
 
 int main() {
-    ll t;
-    cin>>t;
-    while (t--)
+    ll tt;
+    cin>>tt;
+    while (tt--)
     {
         ll n;
         cin>>n;
-        vi a,b;
-        unordered_map<ll,vi>v;
+        vi a;
+        bool f=false;  
+        bool h=false;
+        ll c1=0,c2=0;     
         for(ll i=0; i<n; i++){
             ll x;cin>>x;
-            x--;
             a.pb(x);
-        }       
-        for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            b.pb(x);
-            v[a[i]].pb(x);
+            if(x%2 != 0)
+                f=true;
+            if(x%2==0)
+                h=true;    
+            c1 += (x%2==0);
+            c2 += (x%2 != 0);    
         }
+        if(!f){
+            cout<<0<<endl;
+            continue;
+        }
+        if(!h){
+            cout<<(n+1)/2<<endl;
+            continue;
+        }
+        // cout<<c1<<' '<<c2<<' ';
+        ll ans=0;
+        ans += c1;
+        ans++;
+        c2--;
+        if(c2>0){
+            c2--;
+            if(c2>0)
+                ans += (c2+1)/2;
+        }
+        // if(c2>0){
+        //     ans++;
+        //     c2--;
+        //     ans += c1;
+        //     if(c2>0){
+        //         c2--;
+        //         ans += c2;
+        //     }
+        // }
 
-        vector<vi>mm;
-        for(auto i:v){
-            vi j=i.second;
-            sort(j.rbegin(),j.rend());
-            mm.pb(j);
-        }   
-        vector<vi>z;
-        for(auto i:mm){
-            vi d;
-            for(ll j=0; j<i.size(); j++){
-                if(j==0)
-                    d.pb(i[0]);
-                else
-                    d.pb(d.back()+i[j]);    
-            }
-            z.pb(d);
-        }
-        vi g(n,0);
-        for(auto i:z){
-            for(ll j=1; j<=i.size(); j++){
-                ll k=(i.size()/j)*j;
-                if(i.size()/j > 0)
-                        g[j-1]+=i[k-1];
-            }
-        }
-        for(auto i:g)
-            cout<<i<<' ';
-        cout<<endl;    
+        cout<<ans<<endl;
 
 
     }

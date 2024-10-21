@@ -96,53 +96,36 @@ ll power(ll base, ll exponent)
 
 
 int main() {
-    ll t;
-    cin>>t;
-    while (t--)
+    ll tt;
+    cin>>tt;
+    while (tt--)
     {
-        ll n;
-        cin>>n;
-        vi a,b;
-        unordered_map<ll,vi>v;
+        ll n,k;
+        cin>>n>>k;
+        vi a;
+        bool f=true;
+        unordered_map<ll,ll>mp;
         for(ll i=0; i<n; i++){
             ll x;cin>>x;
-            x--;
             a.pb(x);
-        }       
-        for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            b.pb(x);
-            v[a[i]].pb(x);
+            ll j=x%k;
+            if(j!=0)
+                f=false;
+            mp[k-(x%k)]++;
+        }
+        if(f){
+            cout<<0<<endl;
+            continue;
+        }
+        ll cn=0;
+        for(ll i=1; i<k; i++){
+            if(mp.find(i) != mp.end()){
+                ll p=mp[i];
+                cn=max(cn,p*k);
+            }
         }
 
-        vector<vi>mm;
-        for(auto i:v){
-            vi j=i.second;
-            sort(j.rbegin(),j.rend());
-            mm.pb(j);
-        }   
-        vector<vi>z;
-        for(auto i:mm){
-            vi d;
-            for(ll j=0; j<i.size(); j++){
-                if(j==0)
-                    d.pb(i[0]);
-                else
-                    d.pb(d.back()+i[j]);    
-            }
-            z.pb(d);
-        }
-        vi g(n,0);
-        for(auto i:z){
-            for(ll j=1; j<=i.size(); j++){
-                ll k=(i.size()/j)*j;
-                if(i.size()/j > 0)
-                        g[j-1]+=i[k-1];
-            }
-        }
-        for(auto i:g)
-            cout<<i<<' ';
-        cout<<endl;    
+        cout<<cn<<endl;
 
 
     }

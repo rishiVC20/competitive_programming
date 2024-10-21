@@ -102,48 +102,50 @@ int main() {
     {
         ll n;
         cin>>n;
-        vi a,b;
-        unordered_map<ll,vi>v;
+        string s;
+        cin>>s;
+        ll cn=0;
+        for(ll i=0; i<n; i++)
+            cn += (s[i]=='*');
+        ll p=-1;
+        if(cn==0){
+            cout<<0<<endl;
+            continue;
+        }      
+        ll cur=0;     
         for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            x--;
-            a.pb(x);
-        }       
-        for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            b.pb(x);
-            v[a[i]].pb(x);
-        }
-
-        vector<vi>mm;
-        for(auto i:v){
-            vi j=i.second;
-            sort(j.rbegin(),j.rend());
-            mm.pb(j);
-        }   
-        vector<vi>z;
-        for(auto i:mm){
-            vi d;
-            for(ll j=0; j<i.size(); j++){
-                if(j==0)
-                    d.pb(i[0]);
-                else
-                    d.pb(d.back()+i[j]);    
-            }
-            z.pb(d);
-        }
-        vi g(n,0);
-        for(auto i:z){
-            for(ll j=1; j<=i.size(); j++){
-                ll k=(i.size()/j)*j;
-                if(i.size()/j > 0)
-                        g[j-1]+=i[k-1];
+            if(s[i]=='*'){
+                cur++;
+                if(cur == (cn+1)/2){
+                    p=i;
+                    break;
+                }
             }
         }
-        for(auto i:g)
-            cout<<i<<' ';
-        cout<<endl;    
-
+        ll i=p-1;
+        ll j=p+1;
+        ll ans=0;
+        ll m=0;
+        while(i>=0){
+            if(s[i]=='*'){
+                ans += m;
+            }
+            else{
+                m++;
+            }
+            i--;
+        }
+        m=0;
+        while(j<n){
+            if(s[j]=='*'){
+                ans+=m;
+            }
+            else{
+                m++;
+            }
+            j++;
+        }
+        cout<<ans<<endl;
 
     }
     return 0;

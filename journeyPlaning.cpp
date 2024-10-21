@@ -96,55 +96,53 @@ ll power(ll base, ll exponent)
 
 
 int main() {
-    ll t;
-    cin>>t;
+    ll t=1;
+    // cin>>t;
     while (t--)
-    {
+    {   
         ll n;
         cin>>n;
-        vi a,b;
-        unordered_map<ll,vi>v;
+        vi a;
         for(ll i=0; i<n; i++){
             ll x;cin>>x;
-            x--;
             a.pb(x);
-        }       
+        }
+        unordered_map<ll,ll>mp;
+        // vi w(1e6,0);
         for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            b.pb(x);
-            v[a[i]].pb(x);
+            ll k=a[i]-i;
+            mp[k]+=a[i];
+            // w[k] += a[i];
         }
+        ll j=-1;
+        ll curr=0;
+        // for(auto i:mp){
+        //     ll k=i.second;
+        //     if(k>curr){
+        //         curr=k;
+        //         j=i.first;
+        //     }
+        // }
+        ll cn=0;
+        // for(auto i:mp){
+        //     ll k=i.first;
+        //     ll cp=0;
+        //     for(ll j=0; j<n; j++){
+        //         ll m=a[j]-j;
+        //         if(m==k){
+        //             cp += a[j];
+        //         }
+        //     }
+        //     cn = max(cn,cp);
+        // }
 
-        vector<vi>mm;
-        for(auto i:v){
-            vi j=i.second;
-            sort(j.rbegin(),j.rend());
-            mm.pb(j);
-        }   
-        vector<vi>z;
-        for(auto i:mm){
-            vi d;
-            for(ll j=0; j<i.size(); j++){
-                if(j==0)
-                    d.pb(i[0]);
-                else
-                    d.pb(d.back()+i[j]);    
-            }
-            z.pb(d);
+        // cout<<cn<<endl;
+
+        for(auto i:mp){
+            cn=max(i.second,cn);
         }
-        vi g(n,0);
-        for(auto i:z){
-            for(ll j=1; j<=i.size(); j++){
-                ll k=(i.size()/j)*j;
-                if(i.size()/j > 0)
-                        g[j-1]+=i[k-1];
-            }
-        }
-        for(auto i:g)
-            cout<<i<<' ';
-        cout<<endl;    
-
-
+        cout<<cn<<endl;
+        // cout<<*max_element(w.begin(),w.end())<<endl;
     }
     return 0;
 }

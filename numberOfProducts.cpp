@@ -96,55 +96,47 @@ ll power(ll base, ll exponent)
 
 
 int main() {
-    ll t;
-    cin>>t;
-    while (t--)
+    ll tt=1;
+    // cin>>tt;
+    while (tt--)
     {
-        ll n;
-        cin>>n;
-        vi a,b;
-        unordered_map<ll,vi>v;
+        ll n;cin>>n;
+        vi a;
         for(ll i=0; i<n; i++){
             ll x;cin>>x;
-            x--;
             a.pb(x);
         }       
-        for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            b.pb(x);
-            v[a[i]].pb(x);
+        vector<vi>dp(n,vi(2,0));
+        if(a[0] >= 0){
+            dp[0][0]=1;
+            dp[0][1]=0;
         }
-
-        vector<vi>mm;
-        for(auto i:v){
-            vi j=i.second;
-            sort(j.rbegin(),j.rend());
-            mm.pb(j);
-        }   
-        vector<vi>z;
-        for(auto i:mm){
-            vi d;
-            for(ll j=0; j<i.size(); j++){
-                if(j==0)
-                    d.pb(i[0]);
-                else
-                    d.pb(d.back()+i[j]);    
+        else{
+            dp[0][0]=0;
+            dp[0][1]=1;
+        }
+        ll cn1=0,cn2=0;
+        cn1 += dp[0][1],cn2 += dp[0][0];
+        for(ll i=1; i<n; i++){
+            if(a[i] >= 0){
+                dp[i][0]=1+dp[i-1][0];
+                dp[i][1]=dp[i-1][1];
             }
-            z.pb(d);
-        }
-        vi g(n,0);
-        for(auto i:z){
-            for(ll j=1; j<=i.size(); j++){
-                ll k=(i.size()/j)*j;
-                if(i.size()/j > 0)
-                        g[j-1]+=i[k-1];
+            else{
+                dp[i][0]=dp[i-1][1];
+                dp[i][1]=1+dp[i-1][0];
+
             }
+            cn1 += dp[i][1];
+            cn2 += dp[i][0];
         }
-        for(auto i:g)
-            cout<<i<<' ';
-        cout<<endl;    
-
-
+        // for(auto i:dp){
+        //     for(auto j:i){
+        //         cout<<j<<' ';
+        //     }
+        //     cout<<endl;
+        // }
+        cout<<cn1<<' '<<cn2<<endl;
     }
     return 0;
 }
