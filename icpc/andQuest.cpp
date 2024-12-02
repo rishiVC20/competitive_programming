@@ -94,76 +94,62 @@ ll power(ll base, ll exponent)
     return ans;
 }
 
-void dfs(vector<pair<ll,ll>>a[], ll st, ll en, vector<bool> &vis, vi &c, vector<vi> &s, vi &z){
-    // if(vis[st] == true)
-    //     return;
-    if(st==en){
-        if(c.size() > 0){
-            ll p=accumulate(c.begin(),c.end(),0LL);
-            ll g=*max_element(c.begin(),c.end());
-            p-=g;
-            p += (g/2);
-            z.pb(p);
-        }
+void solve(ll j, ll tar, vector<pair<ll,ll>> &v, ll sum, vi &d, vi &f){
+    if(j==v.size())
+        return;
+    // ll p=sum&v[j].first;
+    ll m=v[j].first&sum;
+    // cout<<m<<' ';
+    if(j==0){
+        m=v[j].first,sum=v[j].first;
+    }
+    // m=sum&v[j].first;
+    // cout<<m<<' ';
+    if(m==tar){
+        cout<<j<<" ";
+        if(f.size() == 0)
+            f=d;
         return;
     }
-    vis[st]=true;
-    for(auto i:a[st]){
-        if(!vis[i.first]){
-            c.pb(i.second);
-            dfs(a,i.first,en,vis,c,s,z);
-            c.pop_back();
-        }
-    }    
-    vis[st]=false;
+
+    
+    d.pb(v[j].second);
+    solve(j+1, tar, v, m,d,f);
+    d.pop_back();
+    solve(j+1,tar,v,sum,d,f);
 }
 
 int main() {
-    ll tt=1;
-    // cin>>tt;
+    ll tt;
+    cin>>tt;
     while (tt--)
     {
-        ll n,m;
-        cin>>n>>m;
-        vector<pair<ll,ll>>a[n+1];
+        ll n,k;
+        cin>>n>>k;
 
-        for(ll i=0; i<m; i++){
-            ll x,y,z;
-            cin>>x>>y>>z;
-            // x--,y--;
-            a[x].pb({y,z});
+        vector<pair<ll,ll>>v(n);
 
+        for(ll i=0; i<n; i++){
+            ll x;cin>>x;
+            v[i].second=i+1,v[i].first=x;
         }
-        // for(auto i:a){
-        //     for(auto j:i)
-        //         cout<<j.first<<' '<<j.second<<' ';
-        //     cout<<endl;    
-        // }
 
-        vector<bool>vis(n+1,false);
-        vi c;
-        vector<vi> s;
-        vi z;
-        dfs(a,1,n,vis,c,s,z);
+        vi d;
+        vi f;
+        solve(0,k,v,(ll)0,d,f);
 
-        ll cn=LLONG_MAX;
-        ll p;
-        // for(auto i:s){
-        //     // cout<<i<<' ';
-        //     ll sum=0;
-        //     ll k=0;
-        //     for(auto j:i){
-        //         sum += j;
-        //         k=max(k,j);
-        //     }
-        //     sum -= k;
-        //     sum += (k/2);
-        //     cn = min(cn,sum);
-                
-        //     // cout<<endl;    
-        // }
+        if(f.size() > 0){
+            YES;
+            cout<<f.size()<<endl;
+            for(auto i:f)
+                cout<<i<<' ';
+            cout<<endl;
+            continue;    
+        }
 
-        cout<<*min_element(z.begin(),z.end())<<endl;
+        NO;
+
+
     }
     return 0;
 }

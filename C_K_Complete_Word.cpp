@@ -94,76 +94,66 @@ ll power(ll base, ll exponent)
     return ans;
 }
 
-void dfs(vector<pair<ll,ll>>a[], ll st, ll en, vector<bool> &vis, vi &c, vector<vi> &s, vi &z){
-    // if(vis[st] == true)
-    //     return;
-    if(st==en){
-        if(c.size() > 0){
-            ll p=accumulate(c.begin(),c.end(),0LL);
-            ll g=*max_element(c.begin(),c.end());
-            p-=g;
-            p += (g/2);
-            z.pb(p);
-        }
-        return;
-    }
-    vis[st]=true;
-    for(auto i:a[st]){
-        if(!vis[i.first]){
-            c.pb(i.second);
-            dfs(a,i.first,en,vis,c,s,z);
-            c.pop_back();
-        }
-    }    
-    vis[st]=false;
-}
 
 int main() {
-    ll tt=1;
-    // cin>>tt;
+    ll tt;
+    cin>>tt;
     while (tt--)
     {
-        ll n,m;
-        cin>>n>>m;
-        vector<pair<ll,ll>>a[n+1];
+        ll n,k;
+        cin>>n>>k;
 
-        for(ll i=0; i<m; i++){
-            ll x,y,z;
-            cin>>x>>y>>z;
-            // x--,y--;
-            a[x].pb({y,z});
+        string s;
+        cin>>s;
 
-        }
-        // for(auto i:a){
-        //     for(auto j:i)
-        //         cout<<j.first<<' '<<j.second<<' ';
-        //     cout<<endl;    
-        // }
+        vector<vector<ll>>v(k,vector<ll>(26,0));
 
-        vector<bool>vis(n+1,false);
-        vi c;
-        vector<vi> s;
-        vi z;
-        dfs(a,1,n,vis,c,s,z);
-
-        ll cn=LLONG_MAX;
-        ll p;
-        // for(auto i:s){
-        //     // cout<<i<<' ';
-        //     ll sum=0;
-        //     ll k=0;
-        //     for(auto j:i){
-        //         sum += j;
-        //         k=max(k,j);
+        for(ll i=0; i<n; i++){
+            ll p=s[i]-'a';
+            v[i%k][p]++;
+        }       
+        // for(ll i=0; i<k; i++){
+        //     for(ll j=0; j<26; j++){
+        //         cout<<v[i][j]<<" ";
         //     }
-        //     sum -= k;
-        //     sum += (k/2);
-        //     cn = min(cn,sum);
-                
-        //     // cout<<endl;    
+        //     cout<<endl;
         // }
+        // cout<<endl;
+        ll i=0,j=k-1;
+        ll cn=0;
+        while(i<=j){
+            if(i!=j){
+                for(ll m=0; m<26; m++){
+                    v[i][m]+=v[j][m];
+                }
+                ll cp1=0,cp2=0;
+                ll maxi1=0,maxi2=0;
+                for(ll m=0; m<26; m++){
+                    cp1 += v[i][m];
+                    maxi1=max(maxi1,v[i][m]);
+                }
+                // cout<<cp1<<" "<<cp2<<endl;
+                cn += (cp1-maxi1);
+                // for(ll m=0; m<26; m++){
+                //     cp2 += v[j][m];
+                //     maxi2=max(maxi2,v[j][m]);
+                // }
+                // cn += (cp1+cp2-maxi1);
+            }
+            else{
+                ll maxi=0,cp=0;
+                for(ll m=0; m<26; m++){
+                    cp+=v[i][m];
+                    maxi=max(maxi,v[i][m]);
+                }
+                cn += (cp-maxi);
+            }
+            i++,j--;
+        }
+        // cout<<endl;
+        cout<<cn<<endl;
 
-        cout<<*min_element(z.begin(),z.end())<<endl;
+
     }
     return 0;
 }

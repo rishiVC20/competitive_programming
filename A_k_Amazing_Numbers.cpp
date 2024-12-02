@@ -94,76 +94,87 @@ ll power(ll base, ll exponent)
     return ans;
 }
 
-void dfs(vector<pair<ll,ll>>a[], ll st, ll en, vector<bool> &vis, vi &c, vector<vi> &s, vi &z){
-    // if(vis[st] == true)
-    //     return;
-    if(st==en){
-        if(c.size() > 0){
-            ll p=accumulate(c.begin(),c.end(),0LL);
-            ll g=*max_element(c.begin(),c.end());
-            p-=g;
-            p += (g/2);
-            z.pb(p);
-        }
-        return;
-    }
-    vis[st]=true;
-    for(auto i:a[st]){
-        if(!vis[i.first]){
-            c.pb(i.second);
-            dfs(a,i.first,en,vis,c,s,z);
-            c.pop_back();
-        }
-    }    
-    vis[st]=false;
-}
 
 int main() {
-    ll tt=1;
-    // cin>>tt;
+    ll tt;
+    cin>>tt;
     while (tt--)
     {
-        ll n,m;
-        cin>>n>>m;
-        vector<pair<ll,ll>>a[n+1];
+        ll n;
+        cin>>n;
 
-        for(ll i=0; i<m; i++){
-            ll x,y,z;
-            cin>>x>>y>>z;
-            // x--,y--;
-            a[x].pb({y,z});
-
+        vi a(n+1);
+        vi dis(n+1,n+1);
+        for(ll i=1; i<=n; i++){
+            ll x;cin>>x;
+            a[i]=x;
         }
-        // for(auto i:a){
+
+        vector<vector<ll>>v(n+1);
+        for(ll i=1; i<=n; i++){
+            v[i].pb(0);
+        }
+
+        for(ll i=1; i<=n; i++){
+            ll k=a[i];
+            ll p=v[k].back();
+            v[k].pb(i);
+            if(p==0){
+                dis[k]=i;
+            }
+            else{
+                dis[k]=max(dis[k],i-p);
+            }
+        }
+
+        for(ll i=1; i<=n; i++){
+            ll k=a[i];
+            ll p=v[k].back();
+            dis[k]=max(dis[k],n+1-p);
+        }
+        // for(auto i:dis)
+        //     cout<<i<<' ';
+
+        // for(auto i:v){
         //     for(auto j:i)
-        //         cout<<j.first<<' '<<j.second<<' ';
+        //         cout<<j<<' ';
         //     cout<<endl;    
         // }
+        // cout<<endl;
+        vi ans(n+1,n+100);
 
-        vector<bool>vis(n+1,false);
-        vi c;
-        vector<vi> s;
-        vi z;
-        dfs(a,1,n,vis,c,s,z);
-
-        ll cn=LLONG_MAX;
-        ll p;
-        // for(auto i:s){
-        //     // cout<<i<<' ';
-        //     ll sum=0;
-        //     ll k=0;
-        //     for(auto j:i){
-        //         sum += j;
-        //         k=max(k,j);
-        //     }
-        //     sum -= k;
-        //     sum += (k/2);
-        //     cn = min(cn,sum);
-                
-        //     // cout<<endl;    
-        // }
-
-        cout<<*min_element(z.begin(),z.end())<<endl;
+        for(ll i=1; i<=n; i++){
+            ll m=dis[i];
+            // cout<<dis[i]<<"k ";
+            if(m<=n){
+                ans[m]=min(ans[m],i);
+            }
+        }
+        ll ind=-1;
+        ll val=n+100;
+        bool f=false;
+        for(ll i=1; i<=n; i++){
+            if(ans[i]!=n+100 && !f){
+                val=ans[i];
+                f=true;
+            }
+            if(f){
+                if(ans[i]<val){
+                    val=ans[i],ind=i;
+                }
+                else{
+                    ans[i]=val;
+                }
+            }
+        }
+        for(ll i=1; i<=n; i++){
+            if(ans[i]==n+100)
+                ans[i]=-1;
+        }
+        for(ll i=1; i<=n; i++){
+            cout<<ans[i]<<' ';
+        }
+        cout<<endl;
     }
     return 0;
 }
