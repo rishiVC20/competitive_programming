@@ -113,63 +113,71 @@ int main()
     // cin>>tt;
     while (tt--)
     {
-        string s;
-        cin >> s;
-        ll n = s.size();
-        vi k;
+        ll n;
+        cin >> n;
 
-        ll cn = 0, maxi = 0;
-        bool f = false;
-        for (ll i = 0; i < n; i++){
-            ll p=s[i]-'a';
-
-            if(p>1)
-                continue;
-
-            if(p==0)
-                cn++;
-            if(p==1 && cn>0){
-                k.pb(cn);
-                cn=0;
-            }  
-            cn=cn%mod;      
+        vi a;
+        map<ll, ll> mp;
+        for (ll i = 0; i < n; i++)
+        {
+            ll x;
+            cin >> x;
+            a.pb(x);
+            mp[x]++;
         }
-        if(cn>0){
-            k.pb(cn);
+        bool f = true;
+        for(auto i:mp){
+            if(i.second%2 == 1){
+                f=false;
+                break;
+            }
         }
-
-        if(k.size()==0){
-            cout<<0<<endl;
+        if(f){
+            YES;
             continue;
         }
-        ll m=k.size();
-        vi v(m);
 
-        v[m-1]=k[m-1];
+        sort(a.begin(), a.end());
 
-        for(ll i=m-2; i>=0; i--){
-            v[i]=v[i+1]+k[i];
+        ll i = 0, j = n - 1;
+
+        while (i < j)
+        {
+            // cout << a[i] << ' ' << a[j] << endl;
+            if (a[i] > a[j])
+            {
+                a[i] -= a[j];
+                a[j] = 0;
+                if (j - i == 1)
+                    break;
+                j--;
+            }
+            else if (a[i] < a[j])
+            {
+                a[j] -= a[i];
+                a[i] = 0;
+                // cout << "j ";
+                if (j - i == 1)
+                    break;
+                i++;
+            }
+            else
+            {
+                a[i] = 0, a[j] = 0;
+                if (j - i == 1)
+                    break;
+                i++, j--;
+            }
         }
 
-        ll sum=1;
-        // for(ll i=0; i<m; i++){
-        //     sum+=k[i];
-        //     sum=sum%mod;
-        // }
-        // for(ll i=0; i<m-1; i++){
-        //     sum += (k[i]*v[i+1]);
-        //     sum=sum%mod;
-        // }
-        // cout<<sum<<" ";
-        ll z=1;
-        for(ll i=0; i<m; i++){
-            // if(k[i]==1)
-            //     continue;
-            sum = (sum*(k[i]+1))%mod;
-            sum=sum%mod;    
-        }
+        // for (auto i : a)
+        //     cout << i << ' ';
+        // cout << endl;
 
-        cout<<(sum-1)%mod<<endl;
+        if (a[i] == a[j])
+            YES;
+        else
+            NO;
     }
     return 0;
 }

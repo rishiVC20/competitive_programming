@@ -109,67 +109,26 @@ ll power(ll base, ll exponent)
 
 int main()
 {
-    ll tt = 1;
-    // cin>>tt;
+    ll tt;
+    cin >> tt;
+    vi dd;
+    ll m=0;
+    while(1){
+        ll k=powl(2,m)-1;
+        m++;
+        ll t=3*k+1;
+        dd.pb(t);
+        if(t>=1e5)
+            break;
+    }
     while (tt--)
     {
-        string s;
-        cin >> s;
-        ll n = s.size();
-        vi k;
+        ll n;
+        cin >> n;
 
-        ll cn = 0, maxi = 0;
-        bool f = false;
-        for (ll i = 0; i < n; i++){
-            ll p=s[i]-'a';
+        ll h=lower_bound(dd.begin(),dd.end(),n)-dd.begin();
 
-            if(p>1)
-                continue;
-
-            if(p==0)
-                cn++;
-            if(p==1 && cn>0){
-                k.pb(cn);
-                cn=0;
-            }  
-            cn=cn%mod;      
-        }
-        if(cn>0){
-            k.pb(cn);
-        }
-
-        if(k.size()==0){
-            cout<<0<<endl;
-            continue;
-        }
-        ll m=k.size();
-        vi v(m);
-
-        v[m-1]=k[m-1];
-
-        for(ll i=m-2; i>=0; i--){
-            v[i]=v[i+1]+k[i];
-        }
-
-        ll sum=1;
-        // for(ll i=0; i<m; i++){
-        //     sum+=k[i];
-        //     sum=sum%mod;
-        // }
-        // for(ll i=0; i<m-1; i++){
-        //     sum += (k[i]*v[i+1]);
-        //     sum=sum%mod;
-        // }
-        // cout<<sum<<" ";
-        ll z=1;
-        for(ll i=0; i<m; i++){
-            // if(k[i]==1)
-            //     continue;
-            sum = (sum*(k[i]+1))%mod;
-            sum=sum%mod;    
-        }
-
-        cout<<(sum-1)%mod<<endl;
+        cout<<h+1<<endl;
     }
     return 0;
 }

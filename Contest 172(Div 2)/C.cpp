@@ -93,86 +93,94 @@
 //     }
 //     return ans;
 // }
-// vi a={1,-1,0,0};
-// vi b={0,0,-1,1};
-// ll solve(char c){
-//     if(c=='D') return 0;
-//     if(c=='U') return 1;
-//     if(c=='L') return 2;
-//     if(c=='R') return 3;
 
-//     return 4;
-// }
-// bool dfs(vector<vector<char>> &v, vector<vector<bool>> &vis, ll i, ll j, ll n, ll m){
-//     if(i<0 || i>=n  || j<0 || j>=m ){
-//         return false;
-//     }
-//     if(vis[i][j]){
-//         return true;
-//     }
-//     vis[i][j]=true;
-//     ll dd=solve(v[i][j]);
-
-//     if(dd!=4){
-//         ll x=i+a[dd],y=j+b[dd];
-//         if(dfs(v,vis,x,y,n,m)){
-//             return true;
-//         }
-
-//     }
-//     else{
-//         for(ll k=0; k<4; k++){
-//             ll x=i+a[k],y=j+b[k];
-//             if(dfs(v,vis,x,y,n,m)){
-//                 if(k==0) v[x][y]='U';
-//                 if(k==1) v[x][y]='D';
-//                 if(k==2) v[x][y]='R';
-//                 if(k==3) v[x][y]='L';
-//                 return true;
-//             }
-//         }
-//     }
-//     return false;
-// }
 
 // int main() {
 //     ll tt;
 //     cin>>tt;
 //     while (tt--)
 //     {
-//         ll n,m;
-//         cin>>n>>m;
+//         ll n,k;
+//         cin>>n>>k;
 
-//         vector<vector<char>>v(n,vector<char>(m));
+//         string s;
+//         cin>>s;
 
-//         for(ll i=0; i<n; i++){
-//             for(ll j=0; j<m; j++){
-//                 cin>>v[i][j];
-//             }
-//         }      
-
-
-//         ll cn=0;
-//         for(ll i=0; i<n; i++){
-//             for(ll j=0; j<m; j++){
-//                 vector<vector<bool>>vis(n,vector<bool>(m,false));
-//                 if(dfs(v,vis,i,j,n,m)){
-//                     cn++;
-//                 }
-//             }
-//             // cout<<endl;
+//         ll x=0,y=0;
+//         for(auto i:s){
+//             x += (i=='0');
+//             y += (i=='1');
 //         }
-//         // for(ll i=0; i<n; i++){
-//         //     for(ll j=0; j<m; j++){
-//         //         cout<<v[i][j];
-//         //     }
-//         //     cout<<endl;
-//         // }
 
-//         cout<<cn<<endl;
+//         ll u=x,v=y;
+//         ll sc=0;
+//         if(s[0]=='0') x--;
+//         if(s[0]=='1') y--;
+
+//         ll m=-1;
+//         for(ll i=1; i<n; i++){
+//             ll p=sc+(i*y-i*x);
+
+//             if(p >= k){
+//                 m=i;
+//                 break;
+//             }
+//             if(s[i]=='0'){
+//                 sc -= 1;
+//                 x--;
+//             }
+//             if(s[i]=='1'){
+//                 sc++;
+//                 y--;
+//             } 
+
+//         }
+
+//         if(m==-1){
+//             cout<<-1<<endl;
+//             continue;
+//         }
+
+
+//         if(s[0]=='0') u--;
+//         if(s[0]=='1') v--;
+
+//         ll j=1;
+//         ll pk=0;
+//         ll c=0,d=0;
+//         while(j<n && s[j]=='0'){
+//             u--;
+//             j++;
+//         }
+//         ll cp=1;
+//         bool f=false;
+//         for(ll i=j; i<n;){
+//             ll p=pk+(cp*v-cp*u);
+//             cp++;
+//             if(p>=k){
+//                 break;
+//             }
+//             if(s[i]=='0'){
+//                 pk-=(cp-1);
+//                 u--;
+//             }
+//             else{
+//                 pk+=(cp-1);
+//                 v--;
+//             }
+//             i++;
+//             while(i<n && s[i]=='0'){
+//                 pk-=(cp-1);
+//                 u--;
+//                 i++;
+//             }
+//         }
+
+//         // cout<<m<<" "<<cp<<" "; 
+
+//         cout<<cp<<endl;
+        
 //     }
-
-    
 //     return 0;
 // }
 
@@ -277,101 +285,48 @@ ll power(ll base, ll exponent)
 int main() {
     ll tt;
     cin>>tt;
+    while (tt--)
+    {
+        ll n,k;
+        cin>>n>>k;
 
-    while(tt--){
-        ll n,m;
-        cin>>n>>m;
+        string s;
+        cin>>s;
 
-        vector<vector<char>>v(n,vector<char>(m));
-        vector<vector<bool>>vis(n,vector<bool>(m,0));
+        vi a;
 
-        for(ll i=0; i<n; i++){
-            for(ll j=0; j<m; j++){
-                cin>>v[i][j];
+        ll p=0;
+        for(ll i=n-1; i>0; i--){
+            if(s[i]=='0'){
+                p--;
+            }
+            else{
+                p++;
+            }
+            a.pb(p);
+        }       
+        sort(a.rbegin(),a.rend());
+        // for(auto i:a)
+        //     cout<<i<<' ';
+        ll cn=0;
+        ll sum=0;
+        for(ll i=0; i<a.size(); i++){
+            if(sum>=k){
+                break;
+            }
+            if(a[i]>=0){
+                cn++;
+                sum+=a[i];
+            }
+            else{
+                break;
             }
         }
 
-        priority_queue<pair<ll,ll>>pq;
-
-        for(ll i=0; i<m; i++){
-            if(v[0][i]=='U'){
-                pq.push({0,i});
-                vis[0][i]=1;
-            }
-            if(v[n-1][i]=='D'){
-                pq.push({n-1,i});
-                vis[n-1][i]=1;
-            }
-        }
-        for(ll i=0; i<n; i++){
-            if(v[i][0]=='L'){
-                pq.push({i,0});
-                vis[i][0]=1;
-            }
-            if(v[m-1][i]=='R'){
-                pq.push({m-1,i});
-                vis[m-1][i]=1;
-            }
-        }
-
-        vi a={1,-1,0,0};
-        vi b={0,0,-1,1};
-        while(!pq.empty()){
-            auto curr=pq.top();
-            pq.pop();
-            ll x=curr.first,y=curr.second;
-
-            for(ll i=0; i<4; i++){
-                ll nx=x+a[i],ny=y+b[i];
-                ll p=nx,q=ny;
-                if(nx>=0 && nx<n && ny>=0 && ny<m && v[nx][ny]!='?'){
-                    if(v[p][q]=='U'){
-                        p--;
-                    }
-                    else if(v[p][q]=='R'){
-                        q++;
-                    }
-                    else if(v[p][q]=='L'){
-                        q--;
-                    }
-                    else if(v[p][q]=='D'){
-                        p++;
-                    }
-                    if(p==nx && q==ny){
-                        vis[nx][ny]=1;
-                        pq.push({nx,ny});
-                    }
-
-                }
-            }
-        }
-
-        ll ans=0;
-        for(ll i=0; i<n; i++){
-            for(ll j=0; j<m; j++){
-                if(v[i][j]=='?'){
-                    bool f=false;
-                    for(ll k=0; k<4; k++){
-                        ll x=i+a[k],y=b[k];
-                        if(x>=0 && x<n && y>=0 && y<m){
-                            if(vis[x][y]==0){
-                                f=true;
-                                break;
-                            }
-                        }
-                    }
-                    if(f)
-                        ans++;
-                }
-                else{
-                    ans += (vis[i][j]==0);
-                }
-            }
-        }
-
-        cout<<ans<<endl;
-        
+        if(sum>=k)
+            cout<<cn+1<<endl;
+        else
+            cout<<-1<<endl;    
     }
-
     return 0;
 }
