@@ -146,76 +146,62 @@ int main() {
                 }
             }
 
+            
+
             curr=1;
-            if(j+1<n){
-                st.insert(a[j+1]+t);
-            }
+            vector<pair<ll,ll>>cc;
+            vector<pair<ll,ll>>dd=vb;
             for(ll i=j+2; i<n; i++){
-                // if(a[i]==a[i-1]){
-                //     curr++;
-                // }
-                // else{
-                //     vb.pb({a[i],curr});
-                //     curr=1;
-                // }
                 if(a[i]==a[i-1]){
                     curr++;
                     if(i==n-1){
+                        cc.pb({a[i],curr});
                         vb.pb({a[i],curr});
                     }
                 }
                 else{
+                    cc.pb({a[i-1],curr});
                     vb.pb({a[i-1],curr});
                     curr=1;
                     if(i==n-1){
+                     cc.pb({a[i],curr});   
                      vb.pb({a[i],curr});   
                     }
                 }
-                // st.insert(a[i]+t);
             }
             if(j==n-2){
-                st.insert(a[n-1]+t);
-                vb.pb({a[n-1],curr});
+                cc.pb({a[n-1],1});
+                vb.pb({a[n-1],1});
             }
-            // for(auto i:st)
-            //     cout<<i<<' ';
-            for(ll i=j+1; i<n; i++){
-                ll k=t+(pre[i]-pre[j]);
-                st.insert(k);
-            }
-            for(ll i=0; i<j; i++){
-                ll k=(pre[j]-pre[i]);
-                st.insert(k);
-            }
-            // for(auto i:st)
-            //     cout<<i<<' ';
-            // if(a[n-1]==a[n-2]){
-            //     vb.back().second++;
-            // }
-            // else{
-            //     vb.pb({a[n-1],1});
-            // }
 
             for(auto i:vb){
-                ll c1=i.first,c2=i.second;
-                ll cc=i.first;
-                for(ll h=0; h<c2; h++){
-                    st.insert(cc);
-                    cc+=c1;
+                ll v1=i.first,v2=i.second;
+                ll cn=v1;
+                for(ll k=0; k<v2; k++){
+                    st.insert(cn);
+                    cn+=v1;
                 }
             }
-            // for(auto i:a){
-            //     if(i!=t){
-            //         st.insert(i+t);
-            //     }
-            // }
-            // if(j+1<n){
-            //     st.insert()
-            // }
-            // for(auto i:st){
-            //     st.insert(i+t);
-            // }
 
+            for(auto i:cc){
+                ll v1=i.first,v2=i.second;
+                ll cn=v1;
+                for(ll k=0; k<v2; k++){
+                    st.insert(cn);
+                    cn+=v1;
+                }
+            }
+            ll m=t;
+            for(ll i=j-1; i>=0; i--){
+                m+=a[i];
+                st.insert(m);
+            }
+
+            m=t;
+            for(ll i=j+1; i<n; i++){
+                m+=a[i];
+                st.insert(m);
+            }
             
         }
 

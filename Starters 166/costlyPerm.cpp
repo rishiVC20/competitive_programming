@@ -79,24 +79,79 @@ int main() {
         }
 
         Disjoint d(n);
+        set<ll>st;
 
         for(ll i=0; i<n; i++){
-            d.unionBySize(i,a[i]);
+            // if(st.find(a[i]) == st.end()){
+                d.unionBySize(a[i],a[a[i]]);
+                // st.insert(a[i]);
+                // st.insert(a[a[i]]);
+            // }
+            
         }
 
-        set<ll>st;
+        
         vi b;
+        set<ll>k;
         for(auto i:a){
-            ll k=d.findParent(i);
-            if(st.find(k) == st.end()){
-                st.insert(k);
-                b.pb(d.size[i]);
+            // cout<<d.findParent(i)<<' ';
+            // cout<<d.size[d.findParent(i)]<<' ';
+            if(k.find(d.findParent(i)) == k.end()){
+                // cout<<"hio ";
+                // cn += d.size[i];
+                // b.pb(d.size[i]);
+                b.pb(d.size[d.findParent(i)]);
+                // cout<<d.size[i]<<' ';
+                k.insert(d.findParent(i));
             }
         }
+        // for(auto i:b)
+        //     cout<<i<<' ';
+        
 
-        ll cn=accumulate(b.begin(),b.end(),0LL);
+        if(b.size()==1){
+            // cout<<"k";
+            cout<<0<<endl;
+            continue;
+        }
 
-        cout<<cn<<endl;
+        sort(b.begin(),b.end());
+        priority_queue<ll,vi,greater<ll>>pq;
+        for(auto i:b){
+            pq.push(i);
+        }
+
+        vi z;
+        while(pq.size() > 1){
+            ll v1=pq.top();
+            pq.pop();
+            ll v2=pq.top();
+            pq.pop();
+            pq.push(v1+v2);
+            z.pb(v1+v2);
+        }
+        // z.pb(pq.top());
+        // ll cn=b[0]+b[1];
+        // vi c;
+        // c.pb(cn);
+        // for(ll i=2; i<b.size(); i++){
+        //     ll m= (b[i]+c.back());
+        //     c.pb(m);
+        //     // cout<<i<<' ';
+        // }
+
+        // cn+=accumulate(b.begin(),b.end(),0LL);
+        // cout<<c.size()<<"h ";
+        ll j=0;
+        for(auto i:z){
+            j+=i;
+            // cout<<i<<' ';
+        }
+
+        cout<<j<<endl;
+        // ll cn=accumulate(b.begin(),b.end(),0LL);
+
+        // cout<<cn<<endl;
     }
     return 0;
 }
