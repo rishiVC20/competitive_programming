@@ -116,32 +116,49 @@ int main() {
     // cin>>tt;
     while (tt--)
     {
-        ll n;
-        cin>>n;
-        if(n==1){
-            cout<<1<<endl;
-            continue;
+        ll m,t,r;
+        cin>>m>>t>>r;
+
+        vi w;
+        for(ll i=0; i<m; i++){
+            ll x;cin>>x;
+            w.pb(x+t);
         }
-        if(n==2){
-            cout<<"1 2"<<endl;
-            continue;
-        }
-        ll k=n-3;
-        vi a(k);
-        for(ll i=1; i<=n; i++){
-            a[i]=i;
-        }
-        while(a.size() != n){
-            vi v;
-            v.pb(1);
-            for(ll i=1; i<a.size(); i++){
-                v.pb(a.back()+a[i]);
+        vi v(1000,0);
+        ll cn=0;
+        bool f=true;
+        for(ll i=0; i<m; i++){
+            ll k=0;
+            for(ll j=w[i]-t; j<w[i]; j++){
+                k += (v[j]==1);
             }
-            a=v;
+            if(k>=r){
+                continue;
+            }
+            ll p=w[i]-t;
+            ll j=w[i]-1;
+            while(k<r && j>=p){
+                if(v[j]==0){
+                    v[j]=1;
+                    cn++;
+                    k++;
+                    j--;
+                    continue;
+                }
+                k += (v[j]==1);
+                j--;
+            }
+            if(k<r){
+                f=false;
+                break;
+            }
+        }
+        if(!f){
+            cout<<-1<<endl;
+            continue;
         }
 
-        for(auto i:a)
-            cout<<i<<' ';
+        cout<<cn<<endl;
     }
     return 0;
 }
