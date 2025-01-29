@@ -123,12 +123,14 @@ int main()
         // t = max(a[0], t / 3);
         // // t=min()
         // cout << t << endl;
-        ll cn = a[0];
-        a[2] -= a[0], a[1] -= a[0], a[0] = 0;
+        if(a[2] >= (a[0]+a[1])*2){
+            // cout<<"hi ";
+            a[2] = (a[0]+a[1])*2;
+        }
 
-        cn += min(a[1], (a[1] + a[2]) / 3);
+        ll cn=(a[0]+a[1]+a[2])/3;
 
-        cout << cn << endl;
+        cout<<cn<<endl;
     }
     return 0;
 }
