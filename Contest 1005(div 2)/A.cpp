@@ -8,6 +8,8 @@
 // #define vi vector<ll>
 // #define vvp vector<pair<ll,ll>>
 // #define vvt vector<tuple<ll,ll,ll>>
+// #define all(a) (a).begin(),(a).end()
+// #define rall(a) (a).rbegin(),(a).rend()
 // #define YES cout<<'Y'<<'E'<<'S'<<endl
 // #define NO cout<<'N'<<'O'<<endl  
 
@@ -116,19 +118,61 @@
 //     cin>>tt;
 //     while (tt--)
 //     {
-//         string n;
-//         ll m;
-//         cin>>n>>m;
+//         ll n;
+//         cin>>n;
+//         string s;
+//         cin>>s;
+//         bool f=true;
+//         for(ll i=n-1; i>=0; i--){
+//             if(s[i]!=s[0]){
+//                 f=false;
+//                 break;
+//             }
+//         }
+//         if(f){
 
-//         string s="";
-//         for(ll i=0; i<s.size(); i++){
-            
+//             if(s[0]=='1'){
+//                 cout<<1<<endl;
+//             }
+//             else{
+//                 cout<<0<<endl;
+//             }
+//             continue;
+//         }
+//         ll j=-1;
+//         for(ll i=0; i<n; i++){
+//             if(s[i]=='1'){
+//                 j=i;
+//                 break;
+//             }
 //         }
 
-//         // string d=to_string(n);
-//         ll len=n.size()%mod;
-
-//         cout<<len<<endl;
+//         ll cp=0;
+//         vi v;
+//         ll cur=1;
+//         if(j==n-1){
+//             v.pb(cur);
+//         }
+//         for(ll i=j+1; i<n; i++){
+//             if(s[i]==s[i-1]){
+//                 cur++;
+//                 // if(i==n-1){
+//                 //     v.pb(cur);
+//                 // }
+//             }
+//             else{
+//                 v.pb(cur);
+//                 cur=1;
+//                 // if(i==n-1){
+//                 //     v.pb(cur);
+//                 // }
+//             }
+//             if(i==n-1){
+//                 v.pb(cur);
+//             }
+//         }
+//         // cout<<cp<<' ';
+//         cout<<(ll)v.size()<<endl;
 //     }
 //     return 0;
 // }
@@ -143,6 +187,8 @@ using namespace std;
 #define vi vector<ll>
 #define vvp vector<pair<ll,ll>>
 #define vvt vector<tuple<ll,ll,ll>>
+#define all(a) (a).begin(),(a).end()
+#define rall(a) (a).rbegin(),(a).rend()
 #define YES cout<<'Y'<<'E'<<'S'<<endl
 #define NO cout<<'N'<<'O'<<endl  
 
@@ -251,24 +297,20 @@ int main() {
     cin>>tt;
     while (tt--)
     {
-        string n;
-        ll m;
-        cin>>n>>m;
-
-        for(ll i=0; i<m; i++){
-            string s="";
-            for(auto j:n){
-                ll p=j-'0'+1;
-                // s.pb(to_string(p));
-                s+=to_string(p);
+        ll n;
+        cin>>n;
+        string s;
+        cin>>s;
+        ll cn=0;
+        for(ll i=1; i<n; i++){
+            if(s[i]!=s[i-1]){
+                cn++;
             }
-            n=s;
         }
 
-        // string d=to_string(n);
-        ll len=n.size()%mod;
-
-        cout<<len<<endl;
+        if(s[0]=='1')
+            cn++;
+        cout<<cn<<endl;    
     }
     return 0;
 }

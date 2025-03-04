@@ -8,6 +8,8 @@
 // #define vi vector<ll>
 // #define vvp vector<pair<ll,ll>>
 // #define vvt vector<tuple<ll,ll,ll>>
+// #define all(a) (a).begin(),(a).end()
+// #define rall(a) (a).rbegin(),(a).rend()
 // #define YES cout<<'Y'<<'E'<<'S'<<endl
 // #define NO cout<<'N'<<'O'<<endl  
 
@@ -116,22 +118,139 @@
 //     cin>>tt;
 //     while (tt--)
 //     {
-//         string n;
-//         ll m;
-//         cin>>n>>m;
-
-//         string s="";
-//         for(ll i=0; i<s.size(); i++){
-            
+//         ll n;
+//         cin>>n;
+//         vi a;
+//         ll j=n;
+//         ll u=-1;
+//         bool f=false;
+//         for(ll i=0; i<n; i++){
+//             ll x;cin>>x;
+//             a.pb(x);
+//             if(x<0 && !f){
+//                 f=true;
+//                 u=i;
+//             }
+//             if(x>0){
+//                 j=i;
+//             }
 //         }
 
-//         // string d=to_string(n);
-//         ll len=n.size()%mod;
+//         ll c1=0,c2=0;
+//         vi d;
+//         ll q1=-1,q2=-1;
+//         ll r=-1;
+//         bool t1=false,t2=false;
+//         for(ll i=0; i<n; i++){
+//             if(a[i]<0){
+//                 if(!t1){
+//                     t1=true;
+//                     q1=i;
+//                 }
+//                 c1+=abs(a[i]);
+//                 if(c2>0){
+//                     d.pb(c2);
+//                 }
+//                 c2=0;
+//                 if(i==n-1){
+//                     d.pb(c1);
+//                 }
+//             }
+//             else{
+                
+//                 if(!t2){
+//                     q2=i;
+//                     t2=true;
+//                 }
+//                 c2+=abs(a[i]);
+//                 if(c1>0){
+                    
+//                     d.pb(c1);
+//                 }
+//                 if(r==-1){
+//                     r=(ll)d.size();
+//                 }
+//                 c1=0;
+//                 if(i==n-1){
+//                     d.pb(c2);
+//                 }
+//             }
+//             // cout<<c1<<' '<<c2<<' ';
+//         }
+//         for(auto i:d)
+//             cout<<i<<' ';
+//         if(q1==-1 || q2==-1){
+//             ll t=accumulate(d.begin(),d.end(),0LL);
+//             cout<<t<<endl;
+//             continue;
+//         }
+//         ll k1=0,k2=0;
+//         if(r!=0){
+//             k1=d[0];
+//         }
+//         // cout<<r<<' ';
 
-//         cout<<len<<endl;
+//         ll rr=0;
+
+//         // for(ll i=r; i<(ll)d.size(); i+=2){
+//         //     ll kk=d[i];
+//         //     if(i+1<(ll)d.size()){
+//         //         kk+=d[i+1];
+//         //     }
+//         //     rr=max(rr,kk);
+//         // }
+//         ll tt=0;
+//         ll cp=0;
+//         for(ll i=r; i<(ll)d.size(); i+=2){
+//             cp+=d[i];
+//             if(i+1<(ll)d.size()){
+//                 cp+=d[i+1];
+//                 tt=max(tt,cp);
+//                 cp-=d[i+1];
+//             }
+//             tt=max(tt,cp);
+//         }
+//         ll pp=0;
+//         // for(ll i=r; i<(ll)d.size(); i+=2){
+//         //     pp+=d[i];
+//         // }
+
+//         ll qq=0;
+//         ll c;
+//         if(r==1){
+//             if((ll)d.size()&1){
+//                 c=(ll)d.size()-1;
+//             }
+//             else{
+//                 c=(ll)d.size()-2;
+//             }
+//         }
+//         else{
+//             if((ll)d.size()&1){
+//                 c=(ll)d.size()-2;
+//             }
+//             else{
+//                 c=(ll)d.size()-1;
+//             }
+//         }
+//         // cout<<c<<' ';
+//         ll ee=0;
+//         ll cn=0;
+//         for(ll i=c; i>=0; i-=2){
+//             cn+=d[i];
+//             if(i-1>=0){
+//                 cn+=d[i-1];
+//                 ee=max(ee,cn);
+//                 cn-=d[i-1];
+//             }
+//             ee=max(ee,cn);
+//         }
+//         cout<<max({ee,tt})<<endl;
+        
 //     }
 //     return 0;
 // }
+
 
 // Rishikesh Chaudhari
 #include<bits/stdc++.h>
@@ -143,6 +262,8 @@ using namespace std;
 #define vi vector<ll>
 #define vvp vector<pair<ll,ll>>
 #define vvt vector<tuple<ll,ll,ll>>
+#define all(a) (a).begin(),(a).end()
+#define rall(a) (a).rbegin(),(a).rend()
 #define YES cout<<'Y'<<'E'<<'S'<<endl
 #define NO cout<<'N'<<'O'<<endl  
 
@@ -251,24 +372,39 @@ int main() {
     cin>>tt;
     while (tt--)
     {
-        string n;
-        ll m;
-        cin>>n>>m;
+        ll n;
+        cin>>n;
 
-        for(ll i=0; i<m; i++){
-            string s="";
-            for(auto j:n){
-                ll p=j-'0'+1;
-                // s.pb(to_string(p));
-                s+=to_string(p);
-            }
-            n=s;
+        vi a;
+        for(ll i=0; i<n; i++){
+            ll x;cin>>x;
+            a.pb(x);
         }
 
-        // string d=to_string(n);
-        ll len=n.size()%mod;
+        vi v1(n),v2(n);
+        ll cp=0;
+        for(ll i=0; i<n; i++){
+            if(a[i]>0){
+                cp+=abs(a[i]);
+            }
+            v1[i]=cp;
+        }
+        cp=0;
+        for(ll i=n-1; i>=0; i--){
+            if(a[i]<0){
+                cp+=abs(a[i]);   
+            }
+            v2[i]=cp;
+        }
 
-        cout<<len<<endl;
+        ll maxi=0;
+        for(ll i=0; i<n; i++){
+            ll t=v1[i]+v2[i];
+            maxi=max(maxi,t);
+        }
+
+        cout<<maxi<<endl;
+
     }
     return 0;
 }
