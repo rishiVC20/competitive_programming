@@ -80,7 +80,7 @@ ll LCM(ll a, ll b){
     return a;
 }
 bool customComparator(const pair<int, int> &a, const pair<int, int> &b){
-    return a.second > b.second;
+    return a.second < b.second;
 }
 ll power(ll base, ll exponent){
     if (exponent < 0){
@@ -108,95 +108,92 @@ ll div(ll a, ll b, ll m = mod){
     return mul(a, invmod(b, m), m);
 }
 
-bool newCustomComparator (const pair<int, int> &a, const pair<int, int> &b){
-    return a.first < b.first;
-}
-
 
 int main() {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr); std::cout.tie(nullptr);
 
 
-    ll tt=1;
-    // cin>>tt;
+    ll tt;
+    cin>>tt;
     while (tt--)
     {
-        ll n,l,k;
-        cin>>n>>l>>k;
-
-        vvp v(n);
+        ll n;
+        cin>>n;
+        vi a;
         for(ll i=0; i<n; i++){
             ll x;cin>>x;
-            v[i].first=x;
-        }
-        for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            v[i].second=x;
-        }
-        vvp vv=v;
-        sort(v.begin(),v.end(),customComparator);
-        vi f(n,0);
-        ll t=0;
-        for(ll i=0; i<n; i++){
-            if(t>=k)
-                break;
-            if(v[i].first==0)
-                continue;
-            f[i]=1;    
-            t++;
-        }
-        vvp d;
-        for(ll i=0; i<n; i++){
-            if(f[i]==1)
-                continue;
-            d.pb({v[i].first,v[i].second});    
+            a.pb(x);
         }
 
-        // for(auto i:d)
-        //     cout<<i.first<<' '<<i.second<<' ';
-
-        sort(d.begin(),d.end(),newCustomComparator);
-        vvp r1;
-        r1.pb({vv[0].first,vv[0].second});
-        t=0;
-        ll pre=0;
-        for(ll i=1; i<n; i++){
-            if(vv[i].second > vv[pre].second && t<k){
-                // cout<<"hi "<<i<<' ';
-                t++;
+        priority_queue<tuple<ll, ll, ll>, vector<tuple<ll, ll, ll>>, greater<tuple<ll, ll, ll>>>pq;
+        // map<ll,vi>mp;
+        ll r=0;
+        vvp s(n);
+        ll x=0,y=0;
+        for(ll i=0; i<n; i++){
+            if(a[i]==0){
+                priority_queue<tuple<ll, ll, ll>, vector<tuple<ll, ll, ll>>, greater<tuple<ll, ll, ll>>>tp;
+                // cout<<i<<' '<<x<<' '<<y<<endl;
+                // pq.push({2*3*r+2,3*r+1,3*r+1});
+                // pq.push({3*x+1+3*y+1,3*x+1,3*y+1});
+                pq.push({3*x+1+3*y+2,3*x+1,3*y+2});
+                pq.push({3*x+2+3*y+1,3*x+2,3*y+1});
+                pq.push({3*x+2+3*y+2,3*x+2,3*y+2});
+                tp.push({3*x+1+3*y+1,3*x+1,3*y+1});
+                tp.push({3*x+1+3*y+2,3*x+1,3*y+2});
+                tp.push({3*x+2+3*y+1,3*x+2,3*y+1});
+                tp.push({3*x+2+3*y+2,3*x+2,3*y+2});
+                if(x==y){
+                    y++;
+                }
+                else{
+                    x++;
+                }
+                r++;
+                // for(auto j:tp){
+                    cout<<i<<' ';
+                    cout<<get<0>(tp.top())<<' '<<get<1>(tp.top())<<' '<<get<2>(tp.top())<<endl;;
+                // }
+                tuple<ll,ll,ll> t=tp.top();
+                s[i]={get<1>(t),get<2>(t)};
+                // pq.pop();
+                // tp.cl
+                // pq.pop();
             }
             else{
-                r1.pb({vv[i].first,vv[i].second});
-                pre=i;
-            }
-            // if(t>=k)
-            //     break;
-        }
-        vvp r2;
-        // pre=
-        // for(ll i=n-1; i>=1; i--){
+                if(!pq.size()){
+                    pq.push({3*x+1+3*y+1,3*x+1,3*y+1});
+                    pq.push({3*x+1+3*y+2,3*x+1,3*y+2});
+                    pq.push({3*x+2+3*y+1,3*x+2,3*y+1});
+                    pq.push({3*x+2+3*y+2,3*x+2,3*y+2});
+                    if(x==y){
+                        y++;
+                    }
+                    else{
+                        x++;
+                    }
+                    r++;
+                }
+                tuple<ll,ll,ll> t=pq.top();
+                pq.pop();
+                s[i]={get<1>(t),get<2>(t)};
+        //         mp[t].pb(i);
+        //         if((ll)mp[r].size()<4){
+        //             pq.push(t);
+        //         }
 
+            }
+        }
+
+        // for(ll i=0; i<n; i++){
+        //     cout<<s[i].first<<' '<<s[i].second<<endl;
+        //     // for(auto j:i.second){
+        //     //     cout<<j+1<<' ';
+        //     // }
+        //     // cout<<endl;
         // }
-        for(auto i:r1)
-            cout<<i.first<<' '<<i.second<<' ';
-        ll ans=0;
-        for(ll i=1; i<d.size(); i++){
-            ll t1=d[i-1].first,t2=d[i].first;
-            ll q=d[i-1].second;
-            ans += (t2-t1)*q;
-        }
-        ans += (l-d[d.size()-1].first)*d[d.size()-1].second;
-        ll cn=0;
-        for(ll i=1; i<r1.size(); i++){
-            ll t1=r1[i-1].first,t2=r1[i].first;
-            ll q=r1[i-1].second;
-            cn += (t2-t1)*q;
-        }
-        cn += (l-r1[r1.size()-1].first)*r1[r1.size()-1].second;
-        cout<<min(ans,cn)<<endl;
+        cout<<endl;
     }
     return 0;
 }
-
-

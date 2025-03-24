@@ -108,95 +108,122 @@ ll div(ll a, ll b, ll m = mod){
     return mul(a, invmod(b, m), m);
 }
 
-bool newCustomComparator (const pair<int, int> &a, const pair<int, int> &b){
-    return a.first < b.first;
-}
+bool solve(ll n, ll mid, vvp v){
+    // ll tp=v[0].second+mid*(v[0].second-1);
+    // if(tp>=n)
+    //     return false;
+    set<pair<int, int>, greater<pair<int, int>>> ss;
+    vi cn(n,0);
+    for(auto i:v){
+        cn[i.first]=i.second;
+        ss.insert({i.second,i.first});
+    }
+    // for(auto i:ss){
+    //     cout<<i.first<<' '<<i.second<<endl;
+    // }
 
+    vi d;
+    for(ll i=0; i<n; i++){
+        if(i>=mid && cn[d[i-mid]]>0){
+            ss.insert({cn[d[i-mid]],d[i-mid]});
+        }
+
+        if(ss.empty())
+            return 0;
+        d.pb(ss.begin()->second);
+        ss.erase(ss.begin());
+        cn[d.back()]--;
+        // for(auto i:ss){
+        //     cout<<i.first<<' '<<i.second<<"H "<<endl;;
+        // }
+        // cout<<endl;
+    }
+    // for(auto i:d){
+    //     cout<<i<<' ';
+    // }
+    return true;
+}
 
 int main() {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr); std::cout.tie(nullptr);
 
 
-    ll tt=1;
-    // cin>>tt;
+    ll tt;
+    cin>>tt;
     while (tt--)
     {
-        ll n,l,k;
-        cin>>n>>l>>k;
-
-        vvp v(n);
+        ll n;
+        cin>>n;
+        vi a;
+        map<ll,ll>mp;
+        vvp v;
         for(ll i=0; i<n; i++){
             ll x;cin>>x;
-            v[i].first=x;
+            x--;
+            a.pb(x);
+            mp[x]++;
         }
-        for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            v[i].second=x;
+        // if(n==1){
+        //     cout<<1<<endl;
+        //     continue;
+        // }
+        for(auto i:mp){
+            v.pb({i.first,i.second});
         }
-        vvp vv=v;
-        sort(v.begin(),v.end(),customComparator);
-        vi f(n,0);
-        ll t=0;
-        for(ll i=0; i<n; i++){
-            if(t>=k)
-                break;
-            if(v[i].first==0)
-                continue;
-            f[i]=1;    
-            t++;
-        }
-        vvp d;
-        for(ll i=0; i<n; i++){
-            if(f[i]==1)
-                continue;
-            d.pb({v[i].first,v[i].second});    
-        }
+        sort(all(v),customComparator);
+        // if(v[0].second>(n+2)/2){
+        //     cout<<0<<endl;
+        //     continue;
+        // }
+        // queue<ll>q;
+        // for(auto i:v){
+        //     q.push(i.first);
+        // }
 
+        // vi d;
+        // while(!q.empty()){
+        //     ll x=q.front();
+        //     q.pop();
+        //     mp[x]--;
+        //     if(mp[x]>0){
+        //         q.push(x);
+        //     }
+        //     // cout<<x<<' ';
+        //     d.pb(x);
+        // }
         // for(auto i:d)
-        //     cout<<i.first<<' '<<i.second<<' ';
-
-        sort(d.begin(),d.end(),newCustomComparator);
-        vvp r1;
-        r1.pb({vv[0].first,vv[0].second});
-        t=0;
-        ll pre=0;
-        for(ll i=1; i<n; i++){
-            if(vv[i].second > vv[pre].second && t<k){
-                // cout<<"hi "<<i<<' ';
-                t++;
+        //     cout<<i<<' ';
+        // set<ll>st;
+        // vi ff(n,-1);
+        // ll dis=n;
+        // for(ll i=0; i<n; i++){
+        //     if(ff[d[i]]==-1){
+        //         ff[d[i]]=i;
+        //     }
+        //     else{
+        //         dis=min(dis,i-ff[d[i]]-1);
+        //         ff[d[i]]=i;
+        //         // break;
+        //     }
+        // }
+        ll l=0, r=n;
+        ll ans=0;
+        while(r-l>1){
+            ll mid=l+(r-l)/2;
+            // cout<<mid<<"g ";
+            if(solve(n,mid,v)){
+                ans=mid;
+                l=mid;
             }
             else{
-                r1.pb({vv[i].first,vv[i].second});
-                pre=i;
+                // cout<<mid<<"y ";
+                r=mid;
             }
-            // if(t>=k)
-            //     break;
         }
-        vvp r2;
-        // pre=
-        // for(ll i=n-1; i>=1; i--){
-
-        // }
-        for(auto i:r1)
-            cout<<i.first<<' '<<i.second<<' ';
-        ll ans=0;
-        for(ll i=1; i<d.size(); i++){
-            ll t1=d[i-1].first,t2=d[i].first;
-            ll q=d[i-1].second;
-            ans += (t2-t1)*q;
-        }
-        ans += (l-d[d.size()-1].first)*d[d.size()-1].second;
-        ll cn=0;
-        for(ll i=1; i<r1.size(); i++){
-            ll t1=r1[i-1].first,t2=r1[i].first;
-            ll q=r1[i-1].second;
-            cn += (t2-t1)*q;
-        }
-        cn += (l-r1[r1.size()-1].first)*r1[r1.size()-1].second;
-        cout<<min(ans,cn)<<endl;
+        // for(auto i:ff)
+        //     cout<<i<<' ';
+        cout<<ans-1<<endl;
     }
     return 0;
 }
-
-

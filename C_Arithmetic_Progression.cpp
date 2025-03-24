@@ -80,7 +80,7 @@ ll LCM(ll a, ll b){
     return a;
 }
 bool customComparator(const pair<int, int> &a, const pair<int, int> &b){
-    return a.second > b.second;
+    return a.second < b.second;
 }
 ll power(ll base, ll exponent){
     if (exponent < 0){
@@ -108,10 +108,6 @@ ll div(ll a, ll b, ll m = mod){
     return mul(a, invmod(b, m), m);
 }
 
-bool newCustomComparator (const pair<int, int> &a, const pair<int, int> &b){
-    return a.first < b.first;
-}
-
 
 int main() {
     std::ios::sync_with_stdio(false);
@@ -122,81 +118,131 @@ int main() {
     // cin>>tt;
     while (tt--)
     {
-        ll n,l,k;
-        cin>>n>>l>>k;
-
-        vvp v(n);
+        ll n;
+        cin>>n;
+        vi a;
+        bool r=true;
         for(ll i=0; i<n; i++){
             ll x;cin>>x;
-            v[i].first=x;
+            a.pb(x);
+            if(i!=0){
+                if(a[i]!=a[i-1]){
+                    r=false;
+                }
+            }
         }
-        for(ll i=0; i<n; i++){
-            ll x;cin>>x;
-            v[i].second=x;
+        if(r && n>1){
+            cout<<1<<endl;
+            cout<<a[0]<<endl;
+            continue;
         }
-        vvp vv=v;
-        sort(v.begin(),v.end(),customComparator);
-        vi f(n,0);
-        ll t=0;
-        for(ll i=0; i<n; i++){
-            if(t>=k)
-                break;
-            if(v[i].first==0)
-                continue;
-            f[i]=1;    
-            t++;
+        sort(all(a));
+        if(n==1){
+            cout<<-1<<endl;
+            continue;
         }
-        vvp d;
-        for(ll i=0; i<n; i++){
-            if(f[i]==1)
-                continue;
-            d.pb({v[i].first,v[i].second});    
-        }
-
-        // for(auto i:d)
-        //     cout<<i.first<<' '<<i.second<<' ';
-
-        sort(d.begin(),d.end(),newCustomComparator);
-        vvp r1;
-        r1.pb({vv[0].first,vv[0].second});
-        t=0;
-        ll pre=0;
-        for(ll i=1; i<n; i++){
-            if(vv[i].second > vv[pre].second && t<k){
-                // cout<<"hi "<<i<<' ';
-                t++;
+        if(n==2){
+            ll d=a[1]-a[0]-1;
+            ll ans=0;
+            ll md=-1;
+            // if(a[1]==a[0]){
+            //     cout<<1<<endl;
+            //     cout<<a[0]<<endl;
+            //     continue;
+            // }
+            if(d&1){
+                ans=3;
+                ll g=(a[1]+a[0])/2;
+                md=g;
+                ll dif=a[1]-a[0];
+                ll t1=a[0]-dif;
+                ll t2=a[1]+dif;
+                cout<<ans<<endl;
+                cout<<t1<<' '<<md<<' '<<t2<<endl;
+                
             }
             else{
-                r1.pb({vv[i].first,vv[i].second});
-                pre=i;
+                ans=2;
+                ll dif=a[1]-a[0];
+                ll t1=a[0]-dif;
+                ll t2=a[1]+dif;
+                cout<<ans<<endl;
+                cout<<t1<<' '<<t2<<endl;
             }
-            // if(t>=k)
-            //     break;
-        }
-        vvp r2;
-        // pre=
-        // for(ll i=n-1; i>=1; i--){
 
+            continue;
+        }
+
+        vvt t;
+        for(ll i=1; i<n; i++){
+            // cout<<a[i]<<' ';
+            t.pb({a[i]-a[i-1],a[i-1],a[i]});
+        }
+        sort(all(t));
+        // for(auto i:t){
+        //     cout<<get<0>(i)<<' '<<get<1>(i)<<' '<<get<2>(i)<<endl;
         // }
-        for(auto i:r1)
-            cout<<i.first<<' '<<i.second<<' ';
+        ll mini=get<0>(t[0]);
+        if(mini==0){
+            cout<<0<<endl;
+            continue;
+        }
+
         ll ans=0;
-        for(ll i=1; i<d.size(); i++){
-            ll t1=d[i-1].first,t2=d[i].first;
-            ll q=d[i-1].second;
-            ans += (t2-t1)*q;
+        vi d;
+        bool f=true;
+        ll cp=0;
+        ll j=-1;
+        for(ll i=0; i<(ll)t.size(); i++){
+            if(get<0>(t[i])==mini){
+                cp++;
+                continue;
+            }
+            else{
+                j=i;
+            }
+            // ll st=get<1>(t[i]);
+            // ll en=get<2>(t[i]);
+            // while(st<en){
+            //     st+=mini;
+            //     if(st!=en){
+            //         ans++;
+            //         d.pb(st);
+            //     }
+            // }
+            // if(st!=en){
+            //     f=false;
+            //     break;
+            // }
         }
-        ans += (l-d[d.size()-1].first)*d[d.size()-1].second;
-        ll cn=0;
-        for(ll i=1; i<r1.size(); i++){
-            ll t1=r1[i-1].first,t2=r1[i].first;
-            ll q=r1[i-1].second;
-            cn += (t2-t1)*q;
+
+        if(!f){
+            // cout<<"ho ";
+            cout<<0<<endl;
+            continue;
         }
-        cn += (l-r1[r1.size()-1].first)*r1[r1.size()-1].second;
-        cout<<min(ans,cn)<<endl;
+        if(cp<n-2){
+            cout<<0<<endl;
+            continue;
+        }
+        if(cp==n-1){
+            cout<<2<<endl;
+            cout<<a[0]-mini<<' '<<a[n-1]+mini<<endl;
+            continue;
+        }
+        ll k=get<1>(t[j])+mini;
+        if(get<2>(t[j])-mini == k){
+            cout<<1<<endl;
+            cout<<k<<endl;
+        }
+        else{
+            cout<<0<<endl;
+        }
+        // cout<<(ll)d.size()<<endl;
+        // for(auto i:d){
+        //     cout<<i<<' ';
+        // }
+        // cout<<endl;
     }
     return 0;
 }
-
-

@@ -118,107 +118,52 @@
 //     cin>>tt;
 //     while (tt--)
 //     {
-//         ll n,l,r;
-//         cin>>n>>l>>r;
-
-//         vi a;
-//         vi v;
-//         a.pb(-1),v.pb(-1);
-//         ll t=0;
-//         for(ll i=1; i<=n; i++){
-//             ll x;cin>>x;
-//             a.pb(x);
-//             t+=(x==1);
-//             v.pb(t);
-//             // if(t%2){
-//             //     v.pb(1);
-//             // }
-//             // else{
-//             //     v.pb(0);
-//             // }
+//         ll n;
+//         cin>>n;
+//         vvt v;
+//         for(ll i=0; i<n; i++){
+//             ll x,y;
+//             cin>>x>>y;
+//             v.pb({x,y,i});
 //         }
 
-//         if(n%2==0){
-//             ll p=n/2;
-//             if(v[p]%2){
-//                 a.pb(1);
-//                 v.pb(v.back()+1);
+//         vi ans(n,-1);
+//         // for(auto i:ans){
+//         //     i=-1;
+//         // }
+
+//         sort(v.begin(),v.end());
+
+//         for(ll i=1; i<n; i++){
+//             ll k=get<2>(v[i]);
+//             if(ans[k]==-1){
+//                 if((get<0>(v[i])>get<0>(v[0]) && get<1>(v[i])>get<1>(v[0])) || (get<0>(v[i])>get<1>(v[0]) && get<1>(v[i])>get<0>(v[0]))){
+//                     ans[k]=get<2>(v[0])+1;
+//                 }
 //             }
-//             else{
-//                 a.pb(0);
-//                 v.pb(v.back());
-//             }
-//             // v.pb(v[p]);
-//             n++;
 //         }
 
-//         for(ll i=n+1; i<=2*n; i++){
-//             ll k=i/2;
-//             // cout<<k<<' ';
-//             // a.pb(a[k]);
-//             if(v[k]%2){
-//                 a.pb(1);
-//                 v.pb(v.back()+1);
-//             }
-//             else{
-//                 a.pb(0);
-//                 v.pb(v.back());
+//         sort(v.begin(), v.end(), [](const tuple<ll, ll, ll> &a, const tuple<ll, ll, ll> &b) {
+//             return get<1>(a) < get<1>(b);
+//         });
+        
+//         for(ll i=1; i<n; i++){
+//             ll k=get<2>(v[i]);
+//             if(ans[k]==-1){
+//                 if((get<0>(v[i])>get<0>(v[0]) && get<1>(v[i])>get<1>(v[0])) || (get<0>(v[i])>get<1>(v[0]) && get<1>(v[i])>get<0>(v[0]))){
+//                     ans[k]=get<2>(v[0])+1;
+//                 }
 //             }
 //         }
-//         // for(auto i:v)
-//         //     cout<<i<<' ';
-//         if(l<=2*n){
-//             if(v[l/2]%2){
-//                 cout<<1<<endl;
-//             }
-//             else{
-//                 cout<<0<<endl;
-//             }
-//             // cout<<v[l]<<endl;
-//             continue;
-//         }
-//         ll m=2*n;
-//         ll q=v.back();
-//         // cout<<q<<' ';
-//         ll d=l/2;
-//         // cout<<d<<' ';
-//         if((d-n)%2==0){
-//             // cout<<"ho ";
-//             if(v[n]%2){
-//                 cout<<1<<endl;
-//             }
-//             else{
-//                 cout<<0<<endl;
-//             }
-//             // cout<<a[n]<<endl;
-//             continue;
-//         }
-//         // cout<<"hi ";
 
-//         ll k=v.size();
-//         ll cn=0;
-//         while(d>=m){
-//             d/=2;
-//             cn++;
+//         for(ll i=0; i<n; i++){
+//             cout<<ans[i]<<' ';
 //         }
-//         // cout<<d<<' ';
-//         ll f=v[n];
-//         if(v[d]%2==1){
-//             if(cn%2==1)
-//                 f++;
-//         }
-//         ll ans;
-//         if(f%2)
-//             ans=1;
-//         else
-//             ans=0;    
-//         deque<ll>dq;
-//         dq.
-//         cout<<ans<<endl;
+
+//         cout<<endl;
 //     }
 //     return 0;
 // }
-
 
 
 // Rishikesh Chaudhari
@@ -282,6 +227,44 @@ public:
         }
     }
 };
+struct TrieNode{
+    bool flag=false;
+    map<char, TrieNode*> children;
+    int cnt=0;
+    void setEnd(){
+        flag=true;
+    }
+    bool isEnd=false;
+    bool isEnd(){
+        return flag;
+    }
+};
+class Trie {
+public:
+    TrieNode* root;
+    Trie() {
+        root = new TrieNode();
+    }
+    void insert(string word) {
+        TrieNode* current = root;
+        for (int i=0; i<word.size(); i++) {
+            if (current->children.find(word[i]) == current->children.end()) {
+                current->children[word[i]] = new TrieNode();
+            }
+            current = current->children[word[i]];
+        }
+        current->isEnd = true;
+    }
+
+    void erase(string &word) {
+        TrieNode *current = root;
+        for(int i=0; i<word.size(); i++){
+            current=current->children[word[i]];
+            current->cnt--;
+        }
+        current->isEnd=true;
+    } 
+};
 ll mAdd(ll a, ll b, ll m = mod){
     a = a % m;
     b = b % m;
@@ -310,7 +293,7 @@ ll power(ll base, ll exponent){
         return 0;
     }
     ll ans = 1;
-    while (exponent){
+    while (exponent){   
         if (exponent%2==0){
             base = (base*base) % mod;
             exponent = exponent/2;
@@ -330,14 +313,8 @@ ll div(ll a, ll b, ll m = mod){
     b = b % m;
     return mul(a, invmod(b, m), m);
 }
-ll pre=0;
-// ll rec(vi &a, ll w, ll l){
-//     if(l<w){
-//         pre^=a[l];
-//         return;
-//     }
-//     pre^=
-// }
+
+
 int main() {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr); std::cout.tie(nullptr);
@@ -347,82 +324,7 @@ int main() {
     cin>>tt;
     while (tt--)
     {
-        ll n,l,r;
-        cin>>n>>l>>r;
-        vi a(n+1);
-        for(ll i=1; i<=n; i++){
-            cin>>a[i];
-        }
-        // if(n%2==0){
-        //     a.resize(n+2);
-        //     ll k=0;
-        //     for(ll i=1; i<=n/2; i++){
-        //         k^=a[i];
-        //     }
-        //     a[n+2]=k;
-        // }
-        // cout<<a.size()<<' ';
-        ll t=0;
-        vi v;
-        v.pb(0);
-        for(ll i=1; i<a.size(); i++){
-            t^=a[i];
-            v.pb(t);
-        }
-        if(l<(ll)a.size()){
-            // cout<<"t ";
-            cout<<a[l]<<endl;
-            continue;
-        }
-        ll g=l/2;
-        if(g<(ll)a.size()){
-            // cout<<"tp ";
-            cout<<v[g]<<endl;
-            continue;
-        }
-        if(g&1){
-            if(n%2==0){
-                // cout<<"hg ";
-                ll t=0;
-                for(ll i=1; i<=n/2; i++){
-                    t^=a[i];
-                }
-                v.pb(t^v.back());
-            }
-            // cout<<"y ";
-            cout<<v.back()<<endl;
-        }
-        else{
-            // cout<<"hi ";
-            ll w=a.size();
-            ll s=l/4;
-            // if(s<=w){
-            //     cout<<a[s]<<endl;
-            // }
-            // else{
-            //     cout<<v.back()<<endl; 
-            // }
-            ll q=l;
-            ll pr=0;
-            ll c=v[(n+1)/2];
-            while(l>n){
-                l/=2;
-                if(l<=n){
-                    pre=v[l];
-                    l=0;
-                    break;
-                }
-                else{
-                    pre^=c;
-                    pre^=a[n];
-                    if(l%2!=0){
-                        break;
-                    }
-                }
-            }
-            cout<<pr<<endl;
-        }
-
+        
     }
     return 0;
 }
