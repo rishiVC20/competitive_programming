@@ -59,6 +59,41 @@ public:
         }
     }
 };
+struct TrieNode{
+    bool flag=false;
+    map<char, TrieNode*> children;
+    int cnt=0;
+    void setEnd(){
+        flag=true;
+    }
+    bool isEnd=false;
+};
+class Trie {
+public:
+    TrieNode* root;
+    Trie() {
+        root = new TrieNode();
+    }
+    void insert(string word) {
+        TrieNode* current = root;
+        for (int i=0; i<word.size(); i++) {
+            if (current->children.find(word[i]) == current->children.end()) {
+                current->children[word[i]] = new TrieNode();
+            }
+            current = current->children[word[i]];
+        }
+        current->isEnd = true;
+    }
+
+    void erase(string &word) {
+        TrieNode *current = root;
+        for(int i=0; i<word.size(); i++){
+            current=current->children[word[i]];
+            current->cnt--;
+        }
+        current->isEnd=true;
+    } 
+};
 ll mAdd(ll a, ll b, ll m = mod){
     a = a % m;
     b = b % m;
@@ -118,32 +153,50 @@ int main() {
     cin>>tt;
     while (tt--)
     {
-        ll x,y;
-        cin>>x>>y;
+        ll n;
+        cin>>n;
 
-        if(x==y){
-            cout<<-1<<endl;
+        string s1,s2;
+        cin>>s1>>s2;
+
+        bool f=true;
+        for(auto i:s1){
+            if(i=='1'){
+                f=false;
+                break;
+            }
+        }
+        if(f){
+            YES;
             continue;
         }
-        ll t=max(x,y);
-        ll p=log2(t);
-        if(power(2,p)==t){
-            cout<<0<<endl;
-            continue;
+        bool f1=true,f2=true;
+        ll cp1=0,cp2=0;
+        for(ll i=0; i<n; i+=2){
+            cp1+=(s2[i]=='1');
         }
-        // cout<<p<<' ';
-        ll r=1;
-        for(ll i=0; i<=p; i++){
-            r *= 2;
+        for(ll i=1; i<n; i+=2){
+            cp2+=(s2[i]=='1');
         }
-        // cout<<p<<' '<<r<<' ';
-        ll ans=r-t;
-        // if(ans<0){
-        //     ans=r-min(x,y);
-        // }
-
-        cout<<ans<<endl;
-
+        // cout<<f1<<' '<<f2<<' ';
+        bool ans=true;
+        ll kp1=0,kp2=0;
+        for(ll i=0; i<n; i+=2){
+            kp1+=(s1[i]=='1');
+        }
+        for(ll i=1; i<n; i+=2){
+            kp2+=(s1[i]=='1');
+        }
+        
+        ll t=(n)/2;
+        ll r1=kp1+cp2,r2=kp2+cp1;
+        // cout<<r1<<' '<<r2<<' ';
+        if(r1>t || r2>(n+1)/2){
+            NO;
+        }
+        else{
+            YES;
+        }
     }
     return 0;
 }

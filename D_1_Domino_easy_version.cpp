@@ -59,6 +59,41 @@ public:
         }
     }
 };
+struct TrieNode{
+    bool flag=false;
+    map<char, TrieNode*> children;
+    int cnt=0;
+    void setEnd(){
+        flag=true;
+    }
+    bool isEnd=false;
+};
+class Trie {
+public:
+    TrieNode* root;
+    Trie() {
+        root = new TrieNode();
+    }
+    void insert(string word) {
+        TrieNode* current = root;
+        for (int i=0; i<word.size(); i++) {
+            if (current->children.find(word[i]) == current->children.end()) {
+                current->children[word[i]] = new TrieNode();
+            }
+            current = current->children[word[i]];
+        }
+        current->isEnd = true;
+    }
+
+    void erase(string &word) {
+        TrieNode *current = root;
+        for(int i=0; i<word.size(); i++){
+            current=current->children[word[i]];
+            current->cnt--;
+        }
+        current->isEnd=true;
+    } 
+};
 ll mAdd(ll a, ll b, ll m = mod){
     a = a % m;
     b = b % m;
@@ -118,32 +153,69 @@ int main() {
     cin>>tt;
     while (tt--)
     {
-        ll x,y;
-        cin>>x>>y;
-
-        if(x==y){
-            cout<<-1<<endl;
+        ll n,m,k;
+        cin>>n>>m>>k;
+        ll t=n*m/2-k;
+        if(n==1){
+            ll r=k*2;
+            if(r==m){
+                YES;
+            }
+            else{
+                NO;
+            }
             continue;
         }
-        ll t=max(x,y);
-        ll p=log2(t);
-        if(power(2,p)==t){
-            cout<<0<<endl;
+        if(m==1){
+            if(k>0)
+                NO;
+            else if(k==0)
+                YES;
             continue;
         }
-        // cout<<p<<' ';
-        ll r=1;
-        for(ll i=0; i<=p; i++){
-            r *= 2;
+        if(n&1){
+            ll p=((k*2)/m);
+            if(p>n){
+                NO;
+                continue;
+            }
+            k-=m/2;
+            if(k<0 || k&1 || t&1){
+                NO;
+            }
+            else{
+                YES;
+            }
+            // cout<<p<<' ';
+            // ll t=(k-p*(m/2))%m;
+            // // cout<<t<<' ';
+            // if(p%2==0 || t%2!=0){
+            //     NO;
+            // }
+            // else{
+            //     YES;
+            // }
         }
-        // cout<<p<<' '<<r<<' ';
-        ll ans=r-t;
-        // if(ans<0){
-        //     ans=r-min(x,y);
-        // }
-
-        cout<<ans<<endl;
-
+        else if(m&1){
+            
+            t-=n/2;
+            if(t<0 || t&1 || k&1){
+                NO;
+            }
+            else{
+                YES;
+            }
+        }
+        else{
+            ll t=k%2;
+            if(k%2==0 && t%2==0){
+                YES;
+                
+            }
+            else{
+                NO;
+            }
+        }
     }
     return 0;
 }

@@ -59,6 +59,41 @@ public:
         }
     }
 };
+struct TrieNode{
+    bool flag=false;
+    map<char, TrieNode*> children;
+    int cnt=0;
+    void setEnd(){
+        flag=true;
+    }
+    bool isEnd=false;
+};
+class Trie {
+public:
+    TrieNode* root;
+    Trie() {
+        root = new TrieNode();
+    }
+    void insert(string word) {
+        TrieNode* current = root;
+        for (int i=0; i<word.size(); i++) {
+            if (current->children.find(word[i]) == current->children.end()) {
+                current->children[word[i]] = new TrieNode();
+            }
+            current = current->children[word[i]];
+        }
+        current->isEnd = true;
+    }
+
+    void erase(string &word) {
+        TrieNode *current = root;
+        for(int i=0; i<word.size(); i++){
+            current=current->children[word[i]];
+            current->cnt--;
+        }
+        current->isEnd=true;
+    } 
+};
 ll mAdd(ll a, ll b, ll m = mod){
     a = a % m;
     b = b % m;
@@ -118,32 +153,65 @@ int main() {
     cin>>tt;
     while (tt--)
     {
-        ll x,y;
-        cin>>x>>y;
-
-        if(x==y){
-            cout<<-1<<endl;
-            continue;
+        ll n,q;
+        cin>>n>>q;
+        string s;
+        cin>>s;
+        vi sum(n+2);
+        ll cp=0;
+        for(ll i=1; i<=n; i++){
+            if(s[i-1]=='-'){
+                cp--;
+            }
+            else{
+                cp++;
+            }
+            sum[i]=cp;
         }
-        ll t=max(x,y);
-        ll p=log2(t);
-        if(power(2,p)==t){
-            cout<<0<<endl;
-            continue;
+        sum[n+1]=cp;
+        vvp v1(n+2),v2(n+2);
+        for(ll i=1; i<=n; i++){
+            v1[i].first=min(v1[i-1].first,sum[i]);
+            v1[i].second=max(v1[i-1].second,sum[i]);
+            // cout<<v1[i].first<<' '<<v1[i].second<<endl;
         }
-        // cout<<p<<' ';
-        ll r=1;
-        for(ll i=0; i<=p; i++){
-            r *= 2;
+        // v1[n+1].first=v1[n].first;
+        // v1[n+1].second=v1[n].second;
+        cp=0;
+        v2[n+1].first=INT_MAX;
+        v2[n+1].second=INT_MIN;
+        for(ll i=n; i>=1; i--){
+            // if(s[i-1]=='-'){
+            //     cp--;
+            // }
+            // else{
+            //     cp++;
+            // }
+            v2[i].first=min(sum[i],v2[i+1].first);
+            v2[i].second=max(sum[i],v2[i+1].second);
+            // cout<<v2[i].first<<' '<<v2[i].second<<endl;
         }
-        // cout<<p<<' '<<r<<' ';
-        ll ans=r-t;
-        // if(ans<0){
-        //     ans=r-min(x,y);
+        // v2[0].first=v2[1].first;
+        // v2[0].second=v2[1].second;
+        // for(ll i=1; i<=n; i++){
+        //     cout<<v2[i].first<<' '<<v2[i].second<<' ';
         // }
+        // cout<<endl;
+        while(q--){
+            ll u,v;
+            cin>>u>>v;
 
-        cout<<ans<<endl;
+            ll mn=min(v1[u-1].first,sum[u-1]+v2[v+1].first-sum[v]);
+            // cout<<v2[v+1].first<<' '<<sum[v]<<' ';
+            ll mx=max(v1[u-1].second,sum[u-1]+v2[v+1].second-sum[v]);
+            // cout<<v1[u-1].second<<' ';
+            // cout<<v1[u-1].first<<' '<<v1[u-1].second<<endl;
+            // cout<<v2[v+1].first<<' '<<v2[v+1].second<<endl;
+            // cout<<mn<<' '<<mx<<' ';
+            cout<<mx-mn+1<<endl;
+        }
 
+        
     }
     return 0;
 }

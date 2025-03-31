@@ -59,6 +59,41 @@ public:
         }
     }
 };
+struct TrieNode{
+    bool flag=false;
+    map<char, TrieNode*> children;
+    int cnt=0;
+    void setEnd(){
+        flag=true;
+    }
+    bool isEnd=false;
+};
+class Trie {
+public:
+    TrieNode* root;
+    Trie() {
+        root = new TrieNode();
+    }
+    void insert(string word) {
+        TrieNode* current = root;
+        for (int i=0; i<word.size(); i++) {
+            if (current->children.find(word[i]) == current->children.end()) {
+                current->children[word[i]] = new TrieNode();
+            }
+            current = current->children[word[i]];
+        }
+        current->isEnd = true;
+    }
+
+    void erase(string &word) {
+        TrieNode *current = root;
+        for(int i=0; i<word.size(); i++){
+            current=current->children[word[i]];
+            current->cnt--;
+        }
+        current->isEnd=true;
+    } 
+};
 ll mAdd(ll a, ll b, ll m = mod){
     a = a % m;
     b = b % m;
@@ -108,6 +143,26 @@ ll div(ll a, ll b, ll m = mod){
     return mul(a, invmod(b, m), m);
 }
 
+ll maxi=1e7+1;
+vector<bool> is_prime(maxi, true);
+set<ll>d;
+vi ff;
+void sieve() {
+    is_prime[0] = is_prime[1] = false;
+    for (ll i=2; i*i<maxi; i++) {
+        // if()
+        if (is_prime[i]) {
+            for (ll j=i*i; j<maxi; j+=i) {
+                is_prime[j] = false;
+            }
+            d.insert(i);
+        }
+    }
+    for(ll i=0; i*i<maxi; i++){
+        if(is_prime[i]==true)
+            ff.pb(i);
+    }
+}
 
 int main() {
     std::ios::sync_with_stdio(false);
@@ -116,34 +171,38 @@ int main() {
 
     ll tt;
     cin>>tt;
+    sieve();
     while (tt--)
     {
-        ll x,y;
-        cin>>x>>y;
-
-        if(x==y){
-            cout<<-1<<endl;
-            continue;
-        }
-        ll t=max(x,y);
-        ll p=log2(t);
-        if(power(2,p)==t){
-            cout<<0<<endl;
-            continue;
-        }
-        // cout<<p<<' ';
-        ll r=1;
-        for(ll i=0; i<=p; i++){
-            r *= 2;
-        }
-        // cout<<p<<' '<<r<<' ';
-        ll ans=r-t;
-        // if(ans<0){
-        //     ans=r-min(x,y);
+        ll n;
+        cin>>n;
+        // for(ll i=0; i<14; i++){
+        //     cout<<ff[i]<<' ';
         // }
+        // cout<<ff.size()<<' ';
+        ll cp=0;
+        for(ll i=2; i<=n; i++){
+            if(is_prime[i]) {
+                cp+=n/i;
+            }
+            ll k=i*ff[0];
+            ll j=0;
 
-        cout<<ans<<endl;
+            // while(k<=n){
+            //     cp++;
+            //     j++;
+            //     if(j==(ll)ff.size()){
+            //         // cout<<j<<' ';
+            //         break;
+            //     }
+            //     k=i*ff[j];
+            // }
+            // cout<<i<<' '<<cp<<' ';
+        }
+        // cp+=n/log(n);
 
+        cout<<cp<<endl;
+        // cout<<endl;
     }
     return 0;
 }

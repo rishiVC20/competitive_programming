@@ -59,6 +59,41 @@ public:
         }
     }
 };
+struct TrieNode{
+    bool flag=false;
+    map<char, TrieNode*> children;
+    int cnt=0;
+    void setEnd(){
+        flag=true;
+    }
+    bool isEnd=false;
+};
+class Trie {
+public:
+    TrieNode* root;
+    Trie() {
+        root = new TrieNode();
+    }
+    void insert(string word) {
+        TrieNode* current = root;
+        for (int i=0; i<word.size(); i++) {
+            if (current->children.find(word[i]) == current->children.end()) {
+                current->children[word[i]] = new TrieNode();
+            }
+            current = current->children[word[i]];
+        }
+        current->isEnd = true;
+    }
+
+    void erase(string &word) {
+        TrieNode *current = root;
+        for(int i=0; i<word.size(); i++){
+            current=current->children[word[i]];
+            current->cnt--;
+        }
+        current->isEnd=true;
+    } 
+};
 ll mAdd(ll a, ll b, ll m = mod){
     a = a % m;
     b = b % m;
@@ -118,32 +153,19 @@ int main() {
     cin>>tt;
     while (tt--)
     {
-        ll x,y;
-        cin>>x>>y;
+        ll n,m,k;
+        cin>>n>>m>>k;
 
-        if(x==y){
-            cout<<-1<<endl;
-            continue;
-        }
-        ll t=max(x,y);
-        ll p=log2(t);
-        if(power(2,p)==t){
-            cout<<0<<endl;
-            continue;
-        }
+        ll p=(k/n)+(k%n!=0);
         // cout<<p<<' ';
-        ll r=1;
-        for(ll i=0; i<=p; i++){
-            r *= 2;
+        if(p<=(m+1)/2){
+            cout<<1<<endl;
+            continue;
         }
-        // cout<<p<<' '<<r<<' ';
-        ll ans=r-t;
-        // if(ans<0){
-        //     ans=r-min(x,y);
-        // }
-
-        cout<<ans<<endl;
-
+        // cout<<"ji ";
+        ll r=m-p;
+        ll t=ceil(m/(r+1));
+        cout<<t<<endl;
     }
     return 0;
 }

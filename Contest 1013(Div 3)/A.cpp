@@ -59,6 +59,41 @@ public:
         }
     }
 };
+struct TrieNode{
+    bool flag=false;
+    map<char, TrieNode*> children;
+    int cnt=0;
+    void setEnd(){
+        flag=true;
+    }
+    bool isEnd=false;
+};
+class Trie {
+public:
+    TrieNode* root;
+    Trie() {
+        root = new TrieNode();
+    }
+    void insert(string word) {
+        TrieNode* current = root;
+        for (int i=0; i<word.size(); i++) {
+            if (current->children.find(word[i]) == current->children.end()) {
+                current->children[word[i]] = new TrieNode();
+            }
+            current = current->children[word[i]];
+        }
+        current->isEnd = true;
+    }
+
+    void erase(string &word) {
+        TrieNode *current = root;
+        for(int i=0; i<word.size(); i++){
+            current=current->children[word[i]];
+            current->cnt--;
+        }
+        current->isEnd=true;
+    } 
+};
 ll mAdd(ll a, ll b, ll m = mod){
     a = a % m;
     b = b % m;
@@ -108,7 +143,16 @@ ll div(ll a, ll b, ll m = mod){
     return mul(a, invmod(b, m), m);
 }
 
+bool check(map<ll,ll> &mp){
+    if(mp.find(0)==mp.end() || mp.find(1)==mp.end() || mp.find(2)==mp.end() || mp.find(3)==mp.end() || mp.find(5)==mp.end()){
+        return false;
+    }
 
+    if(mp[0]<3 || mp[1]<1 || mp[2]<2 || mp[3]<1 || mp[5]<1){
+        return false;
+    }
+    return true;
+}
 int main() {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr); std::cout.tie(nullptr);
@@ -118,32 +162,30 @@ int main() {
     cin>>tt;
     while (tt--)
     {
-        ll x,y;
-        cin>>x>>y;
-
-        if(x==y){
-            cout<<-1<<endl;
-            continue;
+        ll n;
+        cin>>n;
+        map<ll,ll>mp;
+        bool f=false;
+        ll j=0;
+        vi a;
+        for(ll i=0; i<n; i++){
+            ll x;cin>>x;
+            // cout<<x<<' ';
+            a.pb(x);
+            mp[x]++;
+            // for(auto i:mp){
+            //     cout<<i.first<<' '<<i.second<<' '; 
+            // }
+            // cout<<endl;
+            // cout<<check(mp)<<' ';
+            if(check(mp) && !f){
+                
+                f=true;
+                j=i+1;
+            }
         }
-        ll t=max(x,y);
-        ll p=log2(t);
-        if(power(2,p)==t){
-            cout<<0<<endl;
-            continue;
-        }
-        // cout<<p<<' ';
-        ll r=1;
-        for(ll i=0; i<=p; i++){
-            r *= 2;
-        }
-        // cout<<p<<' '<<r<<' ';
-        ll ans=r-t;
-        // if(ans<0){
-        //     ans=r-min(x,y);
-        // }
 
-        cout<<ans<<endl;
-
+        cout<<j<<endl;
     }
     return 0;
 }

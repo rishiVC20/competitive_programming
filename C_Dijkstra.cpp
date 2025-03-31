@@ -59,6 +59,41 @@ public:
         }
     }
 };
+struct TrieNode{
+    bool flag=false;
+    map<char, TrieNode*> children;
+    int cnt=0;
+    void setEnd(){
+        flag=true;
+    }
+    bool isEnd=false;
+};
+class Trie {
+public:
+    TrieNode* root;
+    Trie() {
+        root = new TrieNode();
+    }
+    void insert(string word) {
+        TrieNode* current = root;
+        for (int i=0; i<word.size(); i++) {
+            if (current->children.find(word[i]) == current->children.end()) {
+                current->children[word[i]] = new TrieNode();
+            }
+            current = current->children[word[i]];
+        }
+        current->isEnd = true;
+    }
+
+    void erase(string &word) {
+        TrieNode *current = root;
+        for(int i=0; i<word.size(); i++){
+            current=current->children[word[i]];
+            current->cnt--;
+        }
+        current->isEnd=true;
+    } 
+};
 ll mAdd(ll a, ll b, ll m = mod){
     a = a % m;
     b = b % m;
@@ -114,36 +149,85 @@ int main() {
     std::cin.tie(nullptr); std::cout.tie(nullptr);
 
 
-    ll tt;
-    cin>>tt;
+    ll tt=1;
+    // cin>>tt;
     while (tt--)
     {
-        ll x,y;
-        cin>>x>>y;
+        ll n,m;
+        cin>>n>>m;
+        map<pair<ll,ll>,ll>mp;
+        vector<vector<ll>>adj(n);
+        for(ll i=0; i<m; i++){
+            ll u,v,k;
+            cin>>u>>v>>k;
+            u--,v--;
+            adj[u].pb(v);
+            adj[v].pb(u);
+            mp[{u,v}]=k;
+        }
 
-        if(x==y){
+        vector<ll>par(n);
+        vector<ll>dis(n,LLONG_MAX);
+        vector<bool>vis(n,0);
+        dis[0]=0;
+        par[0]=-1;
+        vis[0]=1;
+        priority_queue<pair<ll,ll>,vector<pair<ll,ll>>,greater<pair<ll,ll>>>pq;
+        pq.push({0,0});
+        while(!pq.empty()){
+            pair<ll,ll>fr=pq.top();
+            ll s=fr.first;
+            ll q=fr.second;
+            pq.pop();
+            // cout<<q<<' ';
+            vis[q]=true;
+            for(auto j:adj[q]){
+                // cout<<q<<' ';
+                if(!vis[j]){
+                    // cout<<j<<' ';
+                    ll g;
+                    if(mp.find({q,j})!=mp.end()){
+                        g=mp[{q,j}];
+                    }
+                    else{
+                        g=mp[{j,q}];
+                    }
+                    ll d=s+g;
+                    if(d<dis[j]){
+                        dis[j]=d;
+                        par[j]=q;
+                        pq.push({d,j});
+                    }
+                }
+            }
+            // cout<<endl;
+        }
+        // cout<<endl;
+        // for(auto i:dis){
+        //     cout<<i<<' '; 
+        // }
+        if(dis[n-1]==LLONG_MAX){
             cout<<-1<<endl;
             continue;
         }
-        ll t=max(x,y);
-        ll p=log2(t);
-        if(power(2,p)==t){
-            cout<<0<<endl;
-            continue;
-        }
-        // cout<<p<<' ';
-        ll r=1;
-        for(ll i=0; i<=p; i++){
-            r *= 2;
-        }
-        // cout<<p<<' '<<r<<' ';
-        ll ans=r-t;
-        // if(ans<0){
-        //     ans=r-min(x,y);
-        // }
 
-        cout<<ans<<endl;
+        vector<ll>t;
+        t.pb(n-1);
+        ll w=par[n-1];
+        t.pb(w);
+        while(w!=-1){
+            ll y=par[t.back()];
+            t.pb(y);
+            w=y;
+        }
 
+        t.pop_back();
+        reverse(t.begin(),t.end());
+
+        for(auto i:t){
+            cout<<i+1<<' ';
+        }
+        cout<<endl;
     }
     return 0;
 }

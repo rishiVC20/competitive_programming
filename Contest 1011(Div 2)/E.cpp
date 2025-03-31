@@ -59,6 +59,41 @@ public:
         }
     }
 };
+struct TrieNode{
+    bool flag=false;
+    map<char, TrieNode*> children;
+    int cnt=0;
+    void setEnd(){
+        flag=true;
+    }
+    bool isEnd=false;
+};
+class Trie {
+public:
+    TrieNode* root;
+    Trie() {
+        root = new TrieNode();
+    }
+    void insert(string word) {
+        TrieNode* current = root;
+        for (int i=0; i<word.size(); i++) {
+            if (current->children.find(word[i]) == current->children.end()) {
+                current->children[word[i]] = new TrieNode();
+            }
+            current = current->children[word[i]];
+        }
+        current->isEnd = true;
+    }
+
+    void erase(string &word) {
+        TrieNode *current = root;
+        for(int i=0; i<word.size(); i++){
+            current=current->children[word[i]];
+            current->cnt--;
+        }
+        current->isEnd=true;
+    } 
+};
 ll mAdd(ll a, ll b, ll m = mod){
     a = a % m;
     b = b % m;
@@ -108,7 +143,40 @@ ll div(ll a, ll b, ll m = mod){
     return mul(a, invmod(b, m), m);
 }
 
+bool func(ll md,vi &a, map<ll,ll> &mp){
+    map<ll,ll>m1;
+    for(ll i=0; i<(ll)a.size(); i++){
+        ll k=a[i]%md;
+        m1[k]++;
+    }
+    for(auto i:mp){
+        if(m1.find(i.first)==m1.end()){
+            return false;
+        }
+        if(m1.find(i.first)!=m1.end() && m1[i.first]!=mp[i.first]){
+            return false;
+        }
+    }
 
+    return true;
+}
+
+ll mx;
+ll ans=-1;
+void rec(ll l,ll r, vi &a, map<ll,ll> &mp){
+    if(l>r){
+        return;
+    }
+
+    ll md=(l+r)/2;
+    if(func(md,a,mp)){
+        ans=md;
+        return;
+    }
+    rec(l,md-1,a,mp);
+    // rec(md+1,r,a,mp);
+
+}
 int main() {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr); std::cout.tie(nullptr);
@@ -118,29 +186,53 @@ int main() {
     cin>>tt;
     while (tt--)
     {
-        ll x,y;
-        cin>>x>>y;
+        ll n;
+        cin>>n;
+        vi a,b;
+        for(ll i=0; i<n; i++){
+            ll x; cin>>x;
+            a.pb(x);
+        }
+        map<ll,ll>mp;
+        ll mx=0;
+        for(ll i=0; i<n; i++){
+            ll x;cin>>x;
+            b.pb(x);
+            mx=max(mx,x);
+            mp[x]++;
+        }
 
-        if(x==y){
-            cout<<-1<<endl;
-            continue;
-        }
-        ll t=max(x,y);
-        ll p=log2(t);
-        if(power(2,p)==t){
-            cout<<0<<endl;
-            continue;
-        }
-        // cout<<p<<' ';
-        ll r=1;
-        for(ll i=0; i<=p; i++){
-            r *= 2;
-        }
-        // cout<<p<<' '<<r<<' ';
-        ll ans=r-t;
-        // if(ans<0){
-        //     ans=r-min(x,y);
+        ll l=mx+1,r=1e9;
+        // cout<<l<<' ';
+        ll ans=-1;
+        // while(l<=r){
+        //     ll md=(l+r+1)/2;
+        //     if(func(md,a,mp)){
+        //         ans=md;
+        //         break;
+        //     }
+        //     else{
+        //         r=md-1;
+        //     }
         // }
+        // if(ans!=-1 && ans<=1e9){
+        //     cout<<ans<<endl;
+        //     continue;
+        // }
+        // // cout<<"hi ";
+        // l=mx+1,r=1e9;
+        // while(l<=r){
+        //     ll md=(l+r+1)/2;
+        //     if(func(md,a,mp)){
+        //         ans=md;
+        //         break;
+        //     }
+        //     else{
+        //         l=md+1;
+        //     }
+        // }
+
+        rec(mx+1,r,a,mp);
 
         cout<<ans<<endl;
 
