@@ -59,6 +59,41 @@ public:
         }
     }
 };
+struct TrieNode{
+    bool flag=false;
+    map<char, TrieNode*> children;
+    int cnt=0;
+    void setEnd(){
+        flag=true;
+    }
+    bool isEnd=false;
+};
+class Trie {
+public:
+    TrieNode* root;
+    Trie() {
+        root = new TrieNode();
+    }
+    void insert(string word) {
+        TrieNode* current = root;
+        for (int i=0; i<word.size(); i++) {
+            if (current->children.find(word[i]) == current->children.end()) {
+                current->children[word[i]] = new TrieNode();
+            }
+            current = current->children[word[i]];
+        }
+        current->isEnd = true;
+    }
+
+    void erase(string &word) {
+        TrieNode *current = root;
+        for(int i=0; i<word.size(); i++){
+            current=current->children[word[i]];
+            current->cnt--;
+        }
+        current->isEnd=true;
+    } 
+};
 ll mAdd(ll a, ll b, ll m = mod){
     a = a % m;
     b = b % m;
@@ -108,60 +143,105 @@ ll div(ll a, ll b, ll m = mod){
     return mul(a, invmod(b, m), m);
 }
 
-ll harmonicApprox(int x) {
-    const ll gamma = 0.5772156649;
-    return log(x + 1) + gamma - 1;
+unordered_map<string,int>mp;
+
+void mapping(){
+    mp["1111011"]=9;
+    mp["1111111"]=8;
+    mp["1010010"]=7;
+    mp["1101111"]=6;
+    mp["0111010"]=4;
+    mp["1101011"]=5;
+    mp["1011011"]=3;
+    mp["1011101"]=2;
+    mp["0010010"]=1;
+    mp["1110111"]=0;
+
 }
+
+bool check(string s, ll &k){
+    if(mp.find(s)!=mp.end()){
+        return true;
+    }
+
+    vi vt(10);
+    for(auto i:mp){
+        ll t=i.second;
+        string g=i.first;
+        ll cnt=0;
+        for(ll j=0; j<7; j++){
+            if(s[j]=='1' && g[j]=='0'){
+                return false;
+            }
+            if(s[j]=='0' && g[j]=='1'){
+                cnt++;
+            }
+            vt[t]=cnt;
+        }
+        
+            
+    }
+    // if()
+    ll mx=-1;
+    ll d=-1;
+    for(ll i=9; i>=0; i--){
+        ll p=vt[i];
+        if(p==-1){
+            continue;
+        }
+        if(mx==-1){
+            mx=p;
+            d=i;
+            continue;
+        }
+        if(mx>p){
+            mx=p;
+            d=i;
+        }
+        // mx=min(mx,p);
+    }
+    ll t=k;
+    if(mx<=k){
+        k-=mx;
+        return true;
+    }
+    
+    return false;
+    // return mx<=k;
+}
+
 int main() {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr); std::cout.tie(nullptr);
 
 
-    ll tt;
-    cin>>tt;
+    ll tt=1;
+    // cin>>tt;
+    mapping();
     while (tt--)
     {
-        ll x,y;
-        cin>>x>>y;
-
-        // cout<<x*(harmonicApprox(y)-1/2)-1   <<endl;
-
-        ll n=x;
-        y=min(y,x-1);
-        ll cn=0;
-        ll b;
-        for(b=2; b*b<=n; b++){
-            ll k=n/b;
-            if(b!=k){
-                if(b<=y){
-                    cn+=min(n/(b+1),b-1);
-                }
-                if(k<=y){
-                    cn+=min(n/(k+1),k-1);
-                }
-            }
-            else{
-                if(b<=y && b>=2)
-                    cn+=min(n/(b+1),b-1);
-            }
-
-            ll l=n/b+1;
-            ll r=min(y,n/(b-1)-1);
-            if(l<=r){
-                cn+=(r-l+1)*(b-1);
-            }
+        ll n,k;
+        cin>>n>>k;
+        vector<string>v;
+        for(ll i=0; i<n; i++){
+            string s;
+            cin>>s;
+            v.pb(s);
         }
 
-        b--;
- 
-        if(b!=n/b and (b+1)!=n/b){
-            ll num=b+1;
-            if(num<=y){
-                cn+=min(n/(num+1),num-1);
+        bool f=true;
+        for(ll i=0; i<n; i++){
+            if(!check(v[i],k)){
+                f=false;
+                break;
             }
         }
+        if(!f){
+            cout<<-1<<endl;
+            continue;
+        }
 
-        cout<<cn<<endl;
+
     }
     return 0;
 }

@@ -59,6 +59,41 @@ public:
         }
     }
 };
+struct TrieNode{
+    bool flag=false;
+    map<char, TrieNode*> children;
+    int cnt=0;
+    void setEnd(){
+        flag=true;
+    }
+    bool isEnd=false;
+};
+class Trie {
+public:
+    TrieNode* root;
+    Trie() {
+        root = new TrieNode();
+    }
+    void insert(string word) {
+        TrieNode* current = root;
+        for (int i=0; i<word.size(); i++) {
+            if (current->children.find(word[i]) == current->children.end()) {
+                current->children[word[i]] = new TrieNode();
+            }
+            current = current->children[word[i]];
+        }
+        current->isEnd = true;
+    }
+
+    void erase(string &word) {
+        TrieNode *current = root;
+        for(int i=0; i<word.size(); i++){
+            current=current->children[word[i]];
+            current->cnt--;
+        }
+        current->isEnd=true;
+    } 
+};
 ll mAdd(ll a, ll b, ll m = mod){
     a = a % m;
     b = b % m;
@@ -108,10 +143,7 @@ ll div(ll a, ll b, ll m = mod){
     return mul(a, invmod(b, m), m);
 }
 
-ll harmonicApprox(int x) {
-    const ll gamma = 0.5772156649;
-    return log(x + 1) + gamma - 1;
-}
+
 int main() {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr); std::cout.tie(nullptr);
@@ -121,47 +153,86 @@ int main() {
     cin>>tt;
     while (tt--)
     {
-        ll x,y;
-        cin>>x>>y;
-
-        // cout<<x*(harmonicApprox(y)-1/2)-1   <<endl;
-
-        ll n=x;
-        y=min(y,x-1);
+        ll n;
+        cin>>n;
+        string s;
+        cin>>s;
+        vi d(n,1);
+        // for(ll i=0; i<n; i++){
+        //     if(s[i]=='R'){
+        //         d[i]=1;
+        //     }
+        // }
         ll cn=0;
-        ll b;
-        for(b=2; b*b<=n; b++){
-            ll k=n/b;
-            if(b!=k){
-                if(b<=y){
-                    cn+=min(n/(b+1),b-1);
-                }
-                if(k<=y){
-                    cn+=min(n/(k+1),k-1);
-                }
+        bool f=true;
+        for(ll i=n-1; i>=0; i--){
+            if(s[i]=='L' && f){
+                f=false;
+                cn++;
             }
-            else{
-                if(b<=y && b>=2)
-                    cn+=min(n/(b+1),b-1);
+            else if(s[i]=='L'){
+                cn=1;
             }
-
-            ll l=n/b+1;
-            ll r=min(y,n/(b-1)-1);
-            if(l<=r){
-                cn+=(r-l+1)*(b-1);
+            if(s[i]=='R' && !f){
+                f=true;
+                cn++;
+                d[i]=cn;
+            }
+            else if(s[i]=='R'){
+                cn=1;
             }
         }
 
-        b--;
- 
-        if(b!=n/b and (b+1)!=n/b){
-            ll num=b+1;
-            if(num<=y){
-                cn+=min(n/(num+1),num-1);
+        cn=0,f=true;
+        for(ll i=0; i<n; i++){
+            if(s[i]=='R' && f){
+                f=false;
+                cn++;
+            }
+            else if(s[i]=='R'){
+                cn=1;
+            }
+            if(s[i]=='L' && !f){
+                f=true;
+                cn++;
+                d[i]=cn;
+            }
+            else if(s[i]=='L'){
+                cn=1;
             }
         }
+        // for(auto i:d){
+        //     cout<<i<<' ';
+        // }
+        vi ans(n+1);
+        if(s[0]=='L'){
+            ans[0]=1;
+        }
+        else{
+            ans[0]=1+d[0];
+        }
+        if(s[n-1]=='R'){
+            ans[n]=1;
+        }
+        else{
+            ans[n]=1+d[n-1];
+        }
+        for(ll i=1; i<n; i++){
+            if(s[i-1]=='L'){
+                ans[i]+=d[i-1];
+            }
+            if(s[i]=='R'){
+                ans[i]+=d[i];
+            }
+            ans[i]++;
+        }
+        // ans[n-1]=1+d[n-2];
 
-        cout<<cn<<endl;
+        // cout<<"hi ";
+        for(auto i:ans){
+            cout<<i<<' ';
+        }
+        cout<<endl;
     }
     return 0;
 }

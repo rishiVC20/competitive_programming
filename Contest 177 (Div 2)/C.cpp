@@ -59,6 +59,41 @@ public:
         }
     }
 };
+struct TrieNode{
+    bool flag=false;
+    map<char, TrieNode*> children;
+    int cnt=0;
+    void setEnd(){
+        flag=true;
+    }
+    bool isEnd=false;
+};
+class Trie {
+public:
+    TrieNode* root;
+    Trie() {
+        root = new TrieNode();
+    }
+    void insert(string word) {
+        TrieNode* current = root;
+        for (int i=0; i<word.size(); i++) {
+            if (current->children.find(word[i]) == current->children.end()) {
+                current->children[word[i]] = new TrieNode();
+            }
+            current = current->children[word[i]];
+        }
+        current->isEnd = true;
+    }
+
+    void erase(string &word) {
+        TrieNode *current = root;
+        for(int i=0; i<word.size(); i++){
+            current=current->children[word[i]];
+            current->cnt--;
+        }
+        current->isEnd=true;
+    } 
+};
 ll mAdd(ll a, ll b, ll m = mod){
     a = a % m;
     b = b % m;
@@ -108,10 +143,7 @@ ll div(ll a, ll b, ll m = mod){
     return mul(a, invmod(b, m), m);
 }
 
-ll harmonicApprox(int x) {
-    const ll gamma = 0.5772156649;
-    return log(x + 1) + gamma - 1;
-}
+
 int main() {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr); std::cout.tie(nullptr);
@@ -121,47 +153,76 @@ int main() {
     cin>>tt;
     while (tt--)
     {
-        ll x,y;
-        cin>>x>>y;
-
-        // cout<<x*(harmonicApprox(y)-1/2)-1   <<endl;
-
-        ll n=x;
-        y=min(y,x-1);
-        ll cn=0;
-        ll b;
-        for(b=2; b*b<=n; b++){
-            ll k=n/b;
-            if(b!=k){
-                if(b<=y){
-                    cn+=min(n/(b+1),b-1);
-                }
-                if(k<=y){
-                    cn+=min(n/(k+1),k-1);
-                }
-            }
+        ll n;
+        cin>>n;
+        vi a(n+1),b(n+1);
+        Disjoint d(n);
+        for(ll i=1; i<=n; i++){
+            ll x;cin>>x;
+            a[i]=x;
+        }
+        set<ll>st;
+        vi cp(n+1);
+        ll tp=0;
+        for(ll i=1; i<=n; i++){
+            ll k=a[i],p=a[k];
+            d.unionBySize(k,p);
+            
+        }
+        for(ll i=1; i<=n ;i++){
+            ll k=a[i],p=a[k];
+            ll r=d.findParent(k);
+            if(st.find(r)==st.end()){
+                tp++;
+                cp[k]=tp,cp[p]=tp;
+                cp[r]=tp;
+            } 
             else{
-                if(b<=y && b>=2)
-                    cn+=min(n/(b+1),b-1);
+                cp[k]=cp[r],cp[p]=cp[r];
             }
-
-            ll l=n/b+1;
-            ll r=min(y,n/(b-1)-1);
-            if(l<=r){
-                cn+=(r-l+1)*(b-1);
-            }
+            st.insert(r);
         }
-
-        b--;
- 
-        if(b!=n/b and (b+1)!=n/b){
-            ll num=b+1;
-            if(num<=y){
-                cn+=min(n/(num+1),num-1);
-            }
+        for(ll i=1; i<=n; i++){
+            ll x;cin>>x;
+            b[i]=x;
         }
-
-        cout<<cn<<endl;
+        map<ll,ll>mp;
+        for(ll i=1; i<=n; i++){
+            ll m=cp[a[i]];
+            mp[m]++;
+        }
+        // for(ll i=1; i<=n; i++){
+        //     cout<<cp[a[i]]<<' ';
+        // }
+        // vvp dp;
+        // for(auto i:mp){
+        //     dp.pb({i.first,i.second});
+        //     // cout<<i.first<<' '<<i.second<<' ';
+        // }
+        // for(ll i=1; i<(ll)dp.size(); i++){
+        //     dp[i].second+=dp[i-1].second;
+        // }
+        // map<ll,ll>m2;
+        // for(auto i:dp){
+        //     m2[i.first]=i.second;
+        //     // cout<<i.first<<' '<<i.second<<' ';
+        // }
+        vi ans(n+1);
+        set<ll>sp;
+        ll ff=0;
+        for(ll i=1; i<=n; i++){
+            ll k=b[i];
+            ll t=cp[k];
+            if(sp.find(t)==sp.end()){
+                ff+=mp[t];
+            }
+            sp.insert(t);
+            ans[i]=ff;
+        }
+        for(ll i=1; i<=n; i++){
+            cout<<ans[i]<<' ';
+        }
+        cout<<endl;
     }
     return 0;
 }

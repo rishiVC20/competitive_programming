@@ -149,83 +149,22 @@ int main() {
     std::cin.tie(nullptr); std::cout.tie(nullptr);
 
 
-    ll tt=1;
-    // cin>>tt;
+    ll tt;
+    cin>>tt;
     while (tt--)
     {
-        ll n,k;
-        cin>>n>>k;
-
-        vector<vi>adj(n+1);
-        vvp df(k+1);
-        for(ll i=1; i<=k; i++){
-            ll u,v;
-            cin>>u>>v;
-            adj[u].pb(i);
-            adj[v].pb(i);
-            df[i]={u,v};
-        }   
-
-        map<ll,ll>mp;
-        for(ll i=1; i<=n; i++){
-            mp[i]++;
+        ll n;
+        cin>>n;
+        if(n%2==0){
+            cout<<-1<<endl;
+            continue;
         }
 
-        ll cp=0;
-        set<ll>st,sp;
-        queue<ll>q;
-        pair<ll,ll>tp=df[1];
-        q.push(tp.first);
-        // sp.insert(1),st.insert(tp.first),st.insert(tp.second);
-        while(!q.empty()){
-            ll fr=q.front();
-            q.pop();
-            for(auto j:adj[fr]){
-                if(sp.find(j)==sp.end()){
-                    pair<ll,ll>dp=df[j];
-                    // cout<<j<<' '<<dp.first<<' '<<dp.second<<endl;
-                    if(st.find(dp.first)==st.end() || st.find(dp.second)==st.end()){
-                        // cout<<j<<' ';
-                        cp++;
-                        if(st.find(dp.first)==st.end()){
-                            q.push(dp.first);
-                            mp.erase(dp.first);
-                        }   
-                        if(st.find(dp.second)==st.end()){
-                            q.push(dp.second);
-                            mp.erase(dp.second);
-                        }   
-                        st.insert(dp.first);
-                        st.insert(dp.second);
-                        // if (mp.find(dp.first) != mp.end()) 
-                        //     mp.erase(dp.first);
-                        // if (mp.find(dp.second) != mp.end()) 
-                        //     mp.erase(dp.second);
-                    }
-                    sp.insert(j);
-                }
-            }
-            
-            // if(q.empty() && (ll)st.size()<n){
-            //     for(auto it: mp){
-            //         if(st.find(it.first) == st.end()){
-            //             q.push(it.first);
-            //             break;
-            //         }
-            //     }
-            // }
-            // if(q.empty() && (ll)st.size()<n && mp.size()>0){
-            //     // cout<<"hi ";
-            //     ll tr=mp.begin()->first;
-            //     if(st.find(tr)==st.end())
-            //         q.push(tr);
-
-            // }
-            
+        cout<<n<<' ';
+        for(ll i=1; i<n; i++){
+            cout<<i<<' ';
         }
-        cout<<"ho ";
-        cout<<k-cp<<endl;
-        
+        cout<<endl;
     }
     return 0;
 }

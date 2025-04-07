@@ -59,6 +59,41 @@ public:
         }
     }
 };
+struct TrieNode{
+    bool flag=false;
+    map<char, TrieNode*> children;
+    int cnt=0;
+    void setEnd(){
+        flag=true;
+    }
+    bool isEnd=false;
+};
+class Trie {
+public:
+    TrieNode* root;
+    Trie() {
+        root = new TrieNode();
+    }
+    void insert(string word) {
+        TrieNode* current = root;
+        for (int i=0; i<word.size(); i++) {
+            if (current->children.find(word[i]) == current->children.end()) {
+                current->children[word[i]] = new TrieNode();
+            }
+            current = current->children[word[i]];
+        }
+        current->isEnd = true;
+    }
+
+    void erase(string &word) {
+        TrieNode *current = root;
+        for(int i=0; i<word.size(); i++){
+            current=current->children[word[i]];
+            current->cnt--;
+        }
+        current->isEnd=true;
+    } 
+};
 ll mAdd(ll a, ll b, ll m = mod){
     a = a % m;
     b = b % m;
@@ -108,10 +143,7 @@ ll div(ll a, ll b, ll m = mod){
     return mul(a, invmod(b, m), m);
 }
 
-ll harmonicApprox(int x) {
-    const ll gamma = 0.5772156649;
-    return log(x + 1) + gamma - 1;
-}
+
 int main() {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr); std::cout.tie(nullptr);
@@ -121,47 +153,42 @@ int main() {
     cin>>tt;
     while (tt--)
     {
-        ll x,y;
-        cin>>x>>y;
+        ll n;
+        cin>>n;
+        vi a;
+        for(ll i=0; i<n; i++){
+            ll x;cin>>x;
+            a.pb(x);
+        }
+        sort(all(a));
 
-        // cout<<x*(harmonicApprox(y)-1/2)-1   <<endl;
-
-        ll n=x;
-        y=min(y,x-1);
-        ll cn=0;
-        ll b;
-        for(b=2; b*b<=n; b++){
-            ll k=n/b;
-            if(b!=k){
-                if(b<=y){
-                    cn+=min(n/(b+1),b-1);
-                }
-                if(k<=y){
-                    cn+=min(n/(k+1),k-1);
-                }
-            }
-            else{
-                if(b<=y && b>=2)
-                    cn+=min(n/(b+1),b-1);
-            }
-
-            ll l=n/b+1;
-            ll r=min(y,n/(b-1)-1);
-            if(l<=r){
-                cn+=(r-l+1)*(b-1);
+        if(a[0]==a[1]){
+            YES;
+            continue;
+        }
+        // cout<<"hi ";
+        ll mn=a[0];
+        vi d;
+        for(ll i=1; i<n; i++){
+            if(a[i]%mn==0){
+                d.pb(a[i]);
             }
         }
-
-        b--;
- 
-        if(b!=n/b and (b+1)!=n/b){
-            ll num=b+1;
-            if(num<=y){
-                cn+=min(n/(num+1),num-1);
-            }
+        if((ll)d.size()==0){
+            NO;
+            continue;
         }
-
-        cout<<cn<<endl;
+        ll gd=d[0];
+        for(ll i=1; i<(ll)d.size(); i++){
+            gd=__gcd(gd,d[i]);
+        }
+        // cout<<gd<<' ';
+        if(gd==mn){
+            YES;
+        }
+        else{
+            NO;
+        }
     }
     return 0;
 }
